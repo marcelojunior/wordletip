@@ -6,7 +6,7 @@ var translations = {
     labelLetters: 'Selecione as letras na ordem correta',
     labelIgnores: 'Selecione as letras que não existem na palavra',
     labelMust: 'Selecione as letras que devem conter na palavra, independente da ordem',
-    useKeyboard: 'Use este teclado para selecioanr as letras no campos acima'
+    useKeyboard: 'Use este teclado para selecionar as letras no campos acima'
   },
   en: {
     searchWord: 'Search Words',

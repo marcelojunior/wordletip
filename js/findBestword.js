@@ -87,6 +87,11 @@ mixins = mixins.concat([
           } else {
             this.letters[this.inputFocus] = letter;
           }
+
+          if(this.inputFocus !== 'l5'){
+            const l = parseInt(this.inputFocus.replace('l', ''));
+            this.inputFocus = `l${l+1}`
+          }
         }
       },
       removeMatch(letter) {

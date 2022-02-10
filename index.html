@@ -115,8 +115,20 @@
         .keyboard {
           font-size: 20px;
           line-height: 31px;
-          padding: 2px 9px;
+          padding: 2px 8px;
         }
+
+        .input.ignore .keyboard, .input.must .keyboard{
+        font-size: 15px;
+        line-height: 20px;
+        padding: 5px 8px;
+        margin-right: 5px;
+      }
+
+      .input.ignore, .input.must {
+    height: 39px;
+    margin-right: 2px;
+}
       }
     </style>
     <script>
@@ -143,7 +155,7 @@
               <v-col sm="12" md="8">
                 <v-card>                  
                   <v-card-text>
-                    <div class="text-h6 font-weight-light text-center mb-5">
+                    <div class="text-h7 font-weight-light text-center mb-5">
                       {{ t('labelLetters') }}
                     </div>
                     <v-row justify="center">
@@ -190,7 +202,7 @@
                     </v-row>
                     <v-row justify="center">                      
                       <v-col cols="12" justify="center">
-                        <div class="text-h6 font-weight-light text-center">
+                        <div class="text-h7 font-weight-light text-center">
                           {{ t('labelIgnores') }}
                         </div>
                         <div 
@@ -210,7 +222,7 @@
                     </v-row>
                     <v-row justify="center">
                       <v-col cols="12" justify="center">
-                        <div class="text-h6 font-weight-light text-center">
+                        <div class="text-h7 font-weight-light text-center">
                           {{ t('labelMust') }}
                         </div>
                         <div 
@@ -236,7 +248,7 @@
               <v-col sm="12" md="8">
                 <v-card>
                   <v-card-text class="text-center">
-                    <div class="text-h6 font-weight-light text-center">
+                    <div class="text-h7 font-weight-light text-center">
                       {{ t('useKeyboard') }}
                     </div>
                     <span v-for="k in keyboard">
@@ -249,21 +261,21 @@
                       >
                       <br v-if="breakeKeyboard.includes(k)" />
                     </span>
-                    <v-row justify="center" class="mt-10">
+                    <v-row justify="center">
                       <v-col sm="12" md="3">
-                        <v-select v-model="lang" :items="languages" hide-details x-large outlined block></v-select>
+                        <v-select v-model="lang" :items="languages" hide-details dense outlined block></v-select>
                       </v-col>
                       <v-col sm="12" md="6">
                         <v-btn
                         color="success"
                         :disabled="disableSearch"
                         @click="findBesWord()"
-                        x-large
-                        
+                        large
+                        block
                       >
                         {{ t('searchWord') }}
                       </v-btn>
-                      <v-btn x-large @click="clear()" :disabled="disableSearch">
+                      <v-btn @click="clear()" :disabled="disableSearch" block small>
                         {{ t('clear') }}
                       </v-btn>
                       </v-col>                                                                
