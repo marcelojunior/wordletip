@@ -199,7 +199,7 @@
                         :class="{'focus-ignore': inputFocus === 'ignore'}">
                         <span v-for="k in ignores">
                           <a
-                            href="#"
+                            href="javascript:void()"
                             @click="toggleIgnore(k)"
                             class="keyboard ignore"
                             >{{k}}</a
@@ -219,7 +219,7 @@
                         :class="{'focus-must': inputFocus === 'must'}">
                         <span v-for="k in must">
                           <a
-                            href="#"
+                            href="javascript:void()"
                             @click="toggleIgnore(k)"
                             class="keyboard must"
                             >{{k}}</a
@@ -241,7 +241,7 @@
                     </div>
                     <span v-for="k in keyboard">
                       <a
-                        href="#"
+                        href="javascript:void()"
                         @click="toggleIgnore(k)"
                         class="keyboard"
                         :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "must": must.includes(k)}'
