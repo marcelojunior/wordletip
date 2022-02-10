@@ -115,20 +115,20 @@
         .keyboard {
           font-size: 20px;
           line-height: 31px;
-          padding: 2px 8px;
+          padding: 2px 7px;
         }
 
         .input.ignore .keyboard, .input.must .keyboard{
-        font-size: 15px;
-        line-height: 20px;
-        padding: 5px 8px;
-        margin-right: 5px;
-      }
+          font-size: 15px;
+          line-height: 20px;
+          padding: 5px 6px;
+          margin-right: 5px;
+        }
 
-      .input.ignore, .input.must {
-    height: 39px;
-    margin-right: 2px;
-}
+        .input.ignore, .input.must {
+          height: 39px;
+          margin-right: 2px;
+        }
       }
     </style>
     <script>
@@ -261,10 +261,7 @@
                       >
                       <br v-if="breakeKeyboard.includes(k)" />
                     </span>
-                    <v-row justify="center">
-                      <v-col sm="12" md="3">
-                        <v-select v-model="lang" :items="languages" hide-details dense outlined block></v-select>
-                      </v-col>
+                    <v-row justify="center">                      
                       <v-col sm="12" md="6">
                         <v-btn
                         color="success"
@@ -278,7 +275,10 @@
                       <v-btn @click="clear()" :disabled="disableSearch" block small>
                         {{ t('clear') }}
                       </v-btn>
-                      </v-col>                                                                
+                      </v-col>   
+                      <v-col sm="12" md="3">
+                        <v-select v-model="lang" :items="languages" hide-details dense outlined block></v-select>
+                      </v-col>                                                             
                     </v-row>
                   </v-card-text>
                 </v-card>
