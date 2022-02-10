@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WordleTip</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <style>
+      .input{
+        text-align: center;
+        border: 3px solid rgb(172, 172, 172);
+        background-color: #fff;
+        color: rgb(136, 136, 136);
+        padding: 5px;
+        border-radius: 5px;
+        text-transform: uppercase;
+      }
+
+      .correct-letter {                                
+        font-size: 40px;        
+        display: block;
+        float: left;
+        width: 80px;
+        height: 80px;
+        margin-left: 5px;        
+      }
+
+      .input:hover{
+        cursor: text;
+      }
+
+      .input:hover, .keyboard:hover {
+        opacity: 0.6;
+      }
+
+      .input.focus {
+        border-color: #00695c;
+        background-color: #dffdfa;
+      }
+
+      .input.ignore, .input.must{
+        height: 50px;
+      }
+
+      .input.ignore .keyboard, .input.must .keyboard{
+        height: 50px;
+        font-size: 20px;
+        line-height: 33px;
+        padding: 5px 10px;
+        margin-right: 5px;
+      }
+
+      .input.focus-ignore {
+        border-color: #e53935;
+        background-color: #ffe9e9;
+      }
+
+      .input.focus-must {
+        border-color: #FF8F00;
+        background-color: #fcedda;
+      }
+
+      .keyboard {
+        background-color: rgb(228 228 228);
+        color: rgb(149 149 149) !important;
+        padding: 5px 20px;
+        width: 76px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 40px;
+        line-height: 63px;
+        text-transform: uppercase;
+      }
+
+      .keyboard.ignore {
+        background-color: #e53935;
+        color: #fff !important;
+      }
+
+      .keyboard.match {
+        background-color: #00695c;
+        color: #fff !important;
+      }
+
+      .keyboard.must {
+        background-color: #FF8F00;
+        color: #fff !important;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .correct-letter {                                
+          font-size: 40px;        
+          width: 50px;
+          height: 50px;
+        }
+
+        .keyboard {
+          font-size: 20px;
+          line-height: 31px;
+          padding: 2px 9px;
+        }
+      }
+    </style>
+    <script>
+      var mixins = [];
+      var words = [];
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <v-app>
+        <v-main>
+          <v-container>
+            <v-row justify="center">
+              <v-col sm="12" md="8">
+                <v-card>                  
+                  <v-card-text>
+                    <div class="text-h6 font-weight-light text-center mb-5">
+                      {{ t('labelLetters') }}
+                    </div>
+                    <v-row justify="center">
+                      <input
+                        type="text"
+                        class="input correct-letter"
+                        v-model="letters.l1"
+                        @focus="inputFocus = 'l1'"
+                        :class="{'focus': inputFocus === 'l1'}"
+                        readonly
+                      />
+                      <input
+                        type="text"
+                        class="input correct-letter"
+                        v-model="letters.l2"
+                        @focus="inputFocus = 'l2'"
+                        :class="{'focus': inputFocus === 'l2'}"
+                        readonly
+                      />
+                      <input
+                        type="text"
+                        class="input correct-letter"
+                        v-model="letters.l3"
+                        @focus="inputFocus = 'l3'"
+                        :class="{'focus': inputFocus === 'l3'}"
+                        readonly
+                      />
+                      <input
+                        type="text"
+                        class="input correct-letter"
+                        v-model="letters.l4"
+                        @focus="inputFocus = 'l4'"
+                        :class="{'focus': inputFocus === 'l4'}"
+                        readonly
+                      />
+                      <input
+                        type="text"
+                        class="input correct-letter"
+                        v-model="letters.l5"
+                        @focus="inputFocus = 'l5'"
+                        :class="{'focus': inputFocus === 'l5'}"
+                        readonly
+                      />
+                    </v-row>
+                    <v-row justify="center">                      
+                      <v-col cols="12" justify="center">
+                        <div class="text-h6 font-weight-light text-center">
+                          {{ t('labelIgnores') }}
+                        </div>
+                        <div 
+                        class="input ignore" 
+                        @click="inputFocus = 'ignore'" 
+                        :class="{'focus-ignore': inputFocus === 'ignore'}">
+                        <span v-for="k in ignores">
+                          <a
+                            href="#"
+                            @click="toggleIgnore(k)"
+                            class="keyboard ignore"
+                            >{{k}}</a
+                          >
+                        </span>
+                      </div>
+                      </v-col>
+                    </v-row>
+                    <v-row justify="center">
+                      <v-col cols="12" justify="center">
+                        <div class="text-h6 font-weight-light text-center">
+                          {{ t('labelMust') }}
+                        </div>
+                        <div 
+                        class="input must" 
+                        @click="inputFocus = 'must'" 
+                        :class="{'focus-must': inputFocus === 'must'}">
+                        <span v-for="k in must">
+                          <a
+                            href="#"
+                            @click="toggleIgnore(k)"
+                            class="keyboard must"
+                            >{{k}}</a
+                          >
+                        </span>
+                      </div>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col sm="12" md="8">
+                <v-card>
+                  <v-card-text class="text-center">
+                    <div class="text-h6 font-weight-light text-center">
+                      {{ t('useKeyboard') }}
+                    </div>
+                    <span v-for="k in keyboard">
+                      <a
+                        href="#"
+                        @click="toggleIgnore(k)"
+                        class="keyboard"
+                        :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "must": must.includes(k)}'
+                        >{{k}}</a
+                      >
+                      <br v-if="breakeKeyboard.includes(k)" />
+                    </span>
+                    <v-row justify="center" class="mt-10">
+                      <v-col sm="12" md="3">
+                        <v-select v-model="lang" :items="languages" hide-details x-large outlined block></v-select>
+                      </v-col>
+                      <v-col sm="12" md="6">
+                        <v-btn
+                        color="success"
+                        :disabled="disableSearch"
+                        @click="findBesWord()"
+                        x-large
+                        
+                      >
+                        {{ t('searchWord') }}
+                      </v-btn>
+                      <v-btn x-large @click="clear()" :disabled="disableSearch">
+                        {{ t('clear') }}
+                      </v-btn>
+                      </v-col>                                                                
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col sm="12" md="8">
+                <v-card>
+                  <v-card-text class="text-center">
+                    <v-chip
+                      v-for="word in bestWords"
+                      style="margin-left: 5px; margin-bottom: 5px"
+                      label
+                    >
+                      {{ word }}
+                    </v-chip>
+
+                    <v-alert v-if="noBestWord" border="left" type="warning" dense>
+                      {{ t('noBestWords') }}
+                    </v-arlert>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-main>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/findBestword.js"></script>
+    <script src="js/wordsPt.js"></script>
+    <script src="js/wordsEn.js"></script>
+    <script>
+      const vue = new Vue({
+        vuetify: new Vuetify(),
+        mixins: mixins,
+      }).$mount("#app");
+    </script>
+  </body>
+</html>
