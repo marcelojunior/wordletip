@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title>WordleTip - Helper to find words in Wordle</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" crossorigin="anonymous" />
   <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
   <meta name="keywords" content="wordle, termo, letreco">
   <meta name="description" content="Helper to find words in Wordle">
@@ -14,19 +14,18 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,  minimal-ui" />
   <link href="css/main.min.css" rel="stylesheet"></link>
   <script>
     var mixins = [];
     var words = [];
   </script>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9NSGP579N"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9NSGP579N" crossorigin="anonymous"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-V9NSGP579N');
   </script>
 </head>
@@ -103,7 +102,7 @@
                   <br v-if="breakeKeyboard.includes(k)" />
                 </span>
                 <span>
-                  <a href="javascript:void(0)" class="keyboard green" @click="findBesWord()">
+                  <a href="javascript:void(0)" class="keyboard green" @click="findBestWord()">
                     <i class="fa fa-check"></i>
                   </a>
                 </span>
@@ -149,8 +148,8 @@
     </v-app>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" crossorigin="anonymous"></script>
   <script src="js.min.js"></script>
   <script>
     const vue = new Vue({

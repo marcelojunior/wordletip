@@ -134,7 +134,8 @@ mixins = mixins.concat([
         }
         return str;
       },
-      findBesWord() {
+      findBestWord() {
+        gtag('event', 'find_best_word')
         const el = this;
         this.bestWords = [];
         const regMatch = new RegExp(

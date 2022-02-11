@@ -65,6 +65,7 @@
   font-size: 30px;
   line-height: 53px;
   text-transform: uppercase;
+  margin-right: 2px;
 }
 
 .keyboard.ignore {
@@ -100,7 +101,7 @@
   }
 
   .keyboard {
-    font-size: 21px;
+    font-size: 23px;
     line-height: 42px;
     padding: 5px 8px;
   }
