@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WordleTip - Helper to find words in Wordle</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
+  <meta name="keywords" content="wordle, termo, letreco">
+  <meta name="description" content="Helper to find words in Wordle">
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  <link href="css/main.min.css" rel="stylesheet"></link>
+  <script>
+    var mixins = [];
+    var words = [];
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9NSGP579N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-V9NSGP579N');
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container>
+          <v-row justify="center">
+            <v-col sm="12" md="8">
+              <v-card>
+                <v-card-text>
+                  <div class="text-h7 font-weight-light text-center mb-5">
+                    {{ t('labelLetters') }}
+                  </div>
+                  <v-row justify="center">
+                    <input type="text" class="input correct-letter" v-model="letters.l1" @click="setFocus('l1')"
+                      :class="{'focus': inputFocus === 'l1'}" readonly />
+                    <input type="text" class="input correct-letter" v-model="letters.l2" @click="setFocus('l2')"
+                      :class="{'focus': inputFocus === 'l2'}" readonly />
+                    <input type="text" class="input correct-letter" v-model="letters.l3" @click="setFocus('l3')"
+                      :class="{'focus': inputFocus === 'l3'}" readonly />
+                    <input type="text" class="input correct-letter" v-model="letters.l4" @click="setFocus('l4')"
+                      :class="{'focus': inputFocus === 'l4'}" readonly />
+                    <input type="text" class="input correct-letter" v-model="letters.l5" @click="setFocus('l5')"
+                      :class="{'focus': inputFocus === 'l5'}" readonly />
+                  </v-row>
+                  <v-row justify="center">
+                    <v-col cols="12" justify="center">
+                      <div class="text-h7 font-weight-light text-center">
+                        {{ t('labelIgnores') }}
+                      </div>
+                      <div class="input ignore" @click="inputFocus = 'ignore'"
+                        :class="{'focus-ignore': inputFocus === 'ignore'}">
+                        <span v-for="k in ignores">
+                          <a href="javascript:void(0)" @click="toggleIgnore(k)" class="keyboard ignore">{{k}}</a>
+                        </span>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-col cols="12" justify="center">
+                      <div class="text-h7 font-weight-light text-center">
+                        {{ t('labelMust') }}
+                      </div>
+                      <div class="input must" @click="inputFocus = 'must'"
+                        :class="{'focus-must': inputFocus === 'must'}">
+                        <span v-for="k in must">
+                          <a href="javascript:void(0)" @click="toggleIgnore(k)" class="keyboard must">{{k}}</a>
+                        </span>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col sm="12" md="8">
+              <div class="text-center">
+                <div class="text-h7 font-weight-light text-center">
+                  {{ t('useKeyboard') }}
+                </div>
+                <span v-for="k in keyboard">
+                  <a href="javascript:void(0)" v-if="k === 'a'" class="keyboard dark" @click="dialogConfig = true">
+                    <i class="fa fa-cog"></i>
+                  </a>
+                  <a href="javascript:void(0)" v-if="k === 'z'" class="keyboard dark" @click="clear()">
+                    <i class="fa fa-broom"></i>
+                  </a>
+                  <a href="javascript:void(0)" @click="toggleIgnore(k)" class="keyboard"
+                    :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "mus t": must.includes(k)}'>{{k}}</a>
+                  <br v-if="breakeKeyboard.includes(k)" />
+                </span>
+                <span>
+                  <a href="javascript:void(0)" class="keyboard green" @click="findBesWord()">
+                    <i class="fa fa-check"></i>
+                  </a>
+                </span>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-dialog v-model="dialogConfig" fullscreen hide-overlay>
+            <v-card fixed>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogConfig = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ t('settings') }}</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text class="mt-5">
+                <v-select v-model="lang" :items="languages" hide-details dense outlined block></v-select>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialogBestWords" fullscreen hide-overlay>
+            <v-card fixed>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogBestWords = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text class="mt-5">
+                <v-chip v-for="word in bestWords" style="margin-left: 5px; margin-bottom: 5px" label>
+                  {{ word }}
+                </v-chip>
+
+                <v-alert v-if="noBestWord" border="left" type="warning" dense>
+                  {{ t('noBestWords') }}
+                  </v-arlert>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="js.min.js"></script>
+  <script>
+    const vue = new Vue({
+      vuetify: new Vuetify(),
+      mixins: mixins,
+    }).$mount("#app");
+  </script>
+</body>
+
+</html>
