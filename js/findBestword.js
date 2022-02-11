@@ -62,7 +62,13 @@ mixins = mixins.concat([
     },
     methods: {
       getCurrentLanguage() {
-        return (navigator.language || navigator.userLanguage).toLowerCase();
+        const currentLang = (navigator.language || navigator.userLanguage).toLowerCase().split('-')[0];
+        const availableLanguages = words.map(m => m.lang);
+        if (availableLanguages.includes(currentLang)){
+          return currentLang;
+        }
+
+        return 'en';
       },
       setFocus(letter){
         this.letters[letter] = null;
@@ -182,7 +188,7 @@ mixins = mixins.concat([
       }
     },
     mounted() {
-      this.lang = this.getCurrentLanguage().split("-")[0];
+      this.lang = this.getCurrentLanguage();
     },
   },
 ]);
