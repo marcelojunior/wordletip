@@ -23,6 +23,9 @@ mixins = mixins.concat([
         dialogConfig: false,
         dialogBestWords: false,
         dialogHelp: false,
+        sendWord: null,
+        snackbar: false,
+        snackbarText: null,
       };
     },
     computed: {
@@ -167,6 +170,16 @@ mixins = mixins.concat([
       t(key) {
         return translations[this.lang][key];
       },
+      sendNotFindWord(){
+        const el = this;
+        gtag('event', 'not_find_word', { 'word': el.sendWord })
+        el.sendWord = null;
+        el.snackbarMsg(el.t('wordSent'))
+      },
+      snackbarMsg(msg){
+        this.snackbarText = msg;
+        this.snackbar = true;
+      }
     },
     mounted() {
       this.lang = this.getCurrentLanguage().split("-")[0];

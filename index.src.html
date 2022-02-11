@@ -3,8 +3,10 @@
 
 <head>
   <title>WordleTip - Helper to find words in Wordle</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" crossorigin="anonymous" />
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"
+    crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" crossorigin="anonymous" />
   <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
   <meta name="keywords" content="wordle, termo, letreco">
@@ -15,7 +17,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1,  minimal-ui" />
-  <link href="css/main.min.css" rel="stylesheet"></link>
+  <link href="css/main.min.css" rel="stylesheet">
+  </link>
   <script>
     var mixins = [];
     var words = [];
@@ -91,7 +94,7 @@
                 <div class="text-h7 font-weight-light text-center">
                   {{ t('useKeyboard') }}
                 </div>
-                <span v-for="k in keyboard">                  
+                <span v-for="k in keyboard">
                   <a href="javascript:void(0)" @click="toggleIgnore(k)" class="keyboard"
                     :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "mus t": must.includes(k)}'>{{k}}</a>
                   <br v-if="breakeKeyboard.includes(k)" />
@@ -101,7 +104,7 @@
                     <i class="fa fa-check"></i>
                   </a>
                 </span>
-                <br/>
+                <br />
                 <span>
                   <a href="javascript:void(0)" class="keyboard dark" @click="clear()">
                     <i class="fa fa-broom"></i>
@@ -149,6 +152,15 @@
                   {{ t('noBestWords') }}
                   </v-arlert>
               </v-card-text>
+
+              <v-divider></v-divider>
+              <v-card flat>
+                <v-card-text>
+                  <h6 class="text-h6 font-weight-light">{{ t('notFindWord') }}</h6>
+                  <v-text-field v-model="sendWord" append-icon="fa-send" @click:append="sendNotFindWord()" dense solo>
+                  </v-text-field>
+                </v-card-text>
+              </v-card>
             </v-card>
           </v-dialog>
 
@@ -169,6 +181,15 @@
               </v-card-text>
             </v-card>
           </v-dialog>
+
+          <v-snackbar v-model="snackbar" :timeout="5000" color="success">
+            {{ snackbarText }}
+            <template v-slot:action="{ attrs }">
+              <v-btn color="white" icon v-bind="attrs" @click="snackbar = false">
+                <v-icon small>fa-times</v-icon>
+              </v-btn>
+            </template>
+          </v-snackbar>
         </v-container>
       </v-main>
     </v-app>

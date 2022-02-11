@@ -14,7 +14,10 @@ var translations = {
     helpHHowToUse: 'Como usar?',
     helpP2: 'Nas caixas superiores, informe as letras que você <strong>já acertou</strong> no jogo, na <strong>ordem correta</strong>.',
     helpP3: 'Na caixa do meio, informe as letras que o jogo já informou que <strong>não existem</strong> na palavra.',
-    helpP4: 'Na última caixa, informe as letras que o jogo já informou que <strong>existem</strong> na palavra, mas estão na ordem errada.'
+    helpP4: 'Na última caixa, informe as letras que o jogo já informou que <strong>existem</strong> na palavra, mas estão na ordem errada.',
+    notFindWord: 'A palavra correta não estava aqui? Nos informe qual era.',
+    send: 'Enviar',
+    wordSent: 'Palavra enviada'
   },
   en: {
     searchWord: 'Search Words',
@@ -31,6 +34,9 @@ var translations = {
     helpHHowToUse: 'How to use?',
     helpP2: 'In the upper boxes, enter the letters you have <strong>already hit</strong> in the game, in the <strong>correct order</strong>.',
     helpP3: 'In the middle box, enter the letters that the game has already reported <strong>does not exist</strong> in the word. ',
-    helpP4: 'In the last box, enter the letters that the game has already reported <strong>exist</strong> in the word, but are in the wrong order.'
+    helpP4: 'In the last box, enter the letters that the game has already reported <strong>exist</strong> in the word, but are in the wrong order.',
+    notFindWord: "Wasn't the correct word here? Let us know what it was.",
+    send: 'Send',
+    wordSent: 'Word sent'
   },
 };
