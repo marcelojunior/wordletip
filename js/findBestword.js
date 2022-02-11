@@ -22,6 +22,7 @@ mixins = mixins.concat([
         ],
         dialogConfig: false,
         dialogBestWords: false,
+        dialogHelp: false,
       };
     },
     computed: {

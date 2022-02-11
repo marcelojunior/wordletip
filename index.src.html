@@ -87,16 +87,11 @@
           <v-row justify="center">
             <v-col sm="12" md="8">
               <div class="text-center">
+                <!-- TECLADO -->
                 <div class="text-h7 font-weight-light text-center">
                   {{ t('useKeyboard') }}
                 </div>
-                <span v-for="k in keyboard">
-                  <a href="javascript:void(0)" v-if="k === 'a'" class="keyboard dark" @click="dialogConfig = true">
-                    <i class="fa fa-cog"></i>
-                  </a>
-                  <a href="javascript:void(0)" v-if="k === 'z'" class="keyboard dark" @click="clear()">
-                    <i class="fa fa-broom"></i>
-                  </a>
+                <span v-for="k in keyboard">                  
                   <a href="javascript:void(0)" @click="toggleIgnore(k)" class="keyboard"
                     :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "mus t": must.includes(k)}'>{{k}}</a>
                   <br v-if="breakeKeyboard.includes(k)" />
@@ -106,6 +101,19 @@
                     <i class="fa fa-check"></i>
                   </a>
                 </span>
+                <br/>
+                <span>
+                  <a href="javascript:void(0)" class="keyboard dark" @click="clear()">
+                    <i class="fa fa-broom"></i>
+                  </a>
+                  <a href="javascript:void(0)" class="keyboard dark" @click="dialogConfig = true">
+                    <i class="fa fa-cog"></i>
+                  </a>
+                  <a href="javascript:void(0)" class="keyboard" @click="dialogHelp = true">
+                    {{ t('whatIsThis') }}
+                  </a>
+                </span>
+                <!-- TECLADO: FIM -->
               </div>
             </v-col>
           </v-row>
@@ -132,7 +140,7 @@
                 </v-btn>
                 <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
               </v-toolbar>
-              <v-card-text class="mt-5">
+              <v-card-text class="mt-5 text-center">
                 <v-chip v-for="word in bestWords" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
                 </v-chip>
@@ -140,6 +148,24 @@
                 <v-alert v-if="noBestWord" border="left" type="warning" dense>
                   {{ t('noBestWords') }}
                   </v-arlert>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialogHelp" fullscreen hide-overlay>
+            <v-card fixed>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogHelp = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ t('whatIsThis') }}</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text class="mt-5">
+                <p v-html="t('helpP1')"></p>
+                <h6 class="text-h6 font-weight-light">{{ t('helpHHowToUse') }}</h6>
+                <p v-html="t('helpP2')"></p>
+                <p v-html="t('helpP3')"></p>
+                <p v-html="t('helpP4')"></p>
               </v-card-text>
             </v-card>
           </v-dialog>

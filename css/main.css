@@ -93,6 +93,11 @@
   color: #fff !important;
 }
 
+.keyboard.help i {
+  text-transform: none;
+  font-size: 17px;
+}
+
 @media only screen and (max-width: 600px) {
   .correct-letter {
     font-size: 40px;

@@ -8,7 +8,13 @@ var translations = {
     labelMust: 'Selecione as letras que devem conter na palavra, independente da ordem',
     useKeyboard: 'Use este teclado para selecionar as letras',
     settings: 'Configurações',
-    wordSuggestion: 'Sugestão de Palavras'
+    wordSuggestion: 'Sugestão de Palavras',
+    whatIsThis: 'Como funciona?',
+    helpP1: 'O WordleTip <strong>não irá adivinhar as palavras para você</strong>. Mas através das entradas das letras, você pode ir reduzindo as possibilidades de palavras para acertar no jogo.',
+    helpHHowToUse: 'Como usar?',
+    helpP2: 'Nas caixas superiores, informe as letras que você <strong>já acertou</strong> no jogo, na <strong>ordem correta</strong>.',
+    helpP3: 'Na caixa do meio, informe as letras que o jogo já informou que <strong>não existem</strong> na palavra.',
+    helpP4: 'Na última caixa, informe as letras que o jogo já informou que <strong>existem</strong> na palavra, mas estão na ordem errada.'
   },
   en: {
     searchWord: 'Search Words',
@@ -19,6 +25,12 @@ var translations = {
     labelMust: 'Select the letters that must contain in the word, without a specific order',
     useKeyboard: 'Use this keyboard to select the letters',
     settings: 'Settings',
-    wordSuggestion: 'Word Suggestion'
+    wordSuggestion: 'Word Suggestion',
+    whatIsThis: 'How it works?',
+    helpP1: 'WordleTip <strong>will not guess the words for you</strong>. But through the input of the letters, you can reduce the possibilities of words to get right in the game.',
+    helpHHowToUse: 'How to use?',
+    helpP2: 'In the upper boxes, enter the letters you have <strong>already hit</strong> in the game, in the <strong>correct order</strong>.',
+    helpP3: 'In the middle box, enter the letters that the game has already reported <strong>does not exist</strong> in the word. ',
+    helpP4: 'In the last box, enter the letters that the game has already reported <strong>exist</strong> in the word, but are in the wrong order.'
   },
 };
