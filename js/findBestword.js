@@ -16,9 +16,12 @@ mixins = mixins.concat([
         lang: "pt",
         inputFocus: "l1",
         noBestWord: false,
-        languages: [{value: 'pt', text: 'Português'}, {value: 'en', text: 'English'}],
+        languages: [
+          { value: "pt", text: "Português" },
+          { value: "en", text: "English" },
+        ],
         dialogConfig: false,
-        dialogBestWords: false
+        dialogBestWords: false,
       };
     },
     computed: {
@@ -45,14 +48,22 @@ mixins = mixins.concat([
       lettersEmpty() {
         return this.matchLetterWithRegex == "-----";
       },
-      disableSearch(){
-          return (this.lettersEmpty && this.must.length === 0 && this.ignores.length === 0)
-      }
+      disableSearch() {
+        return (
+          this.lettersEmpty &&
+          this.must.length === 0 &&
+          this.ignores.length === 0
+        );
+      },
     },
     methods: {
-        getCurrentLanguage(){
+      getCurrentLanguage() {
         return (navigator.language || navigator.userLanguage).toLowerCase();
-        },
+      },
+      setFocus(letter){
+        this.letters[letter] = null;
+        this.inputFocus = letter;
+      },
       clear() {
         this.letters.l1 = null;
         this.letters.l2 = null;
@@ -61,7 +72,7 @@ mixins = mixins.concat([
         this.letters.l5 = null;
         this.ignores = [];
         this.must = [];
-        this.inputFocus = 'l1'
+        this.inputFocus = "l1";
       },
       toggleIgnore(letter) {
         if (this.inputFocus == "ignore") {
@@ -91,9 +102,9 @@ mixins = mixins.concat([
             this.letters[this.inputFocus] = letter;
           }
 
-          if(this.inputFocus !== 'l5'){
-            const l = parseInt(this.inputFocus.replace('l', ''));
-            this.inputFocus = `l${l+1}`
+          if (this.inputFocus !== "l5") {
+            const l = parseInt(this.inputFocus.replace("l", ""));
+            this.inputFocus = `l${l + 1}`;
           }
         }
       },
@@ -131,7 +142,7 @@ mixins = mixins.concat([
           "g"
         );
         const regIgnore = new RegExp(`^((?![${this.ignores}]).)*$`);
-        const regMust = new RegExp(`[${this.must}]`)
+        const regMust = new RegExp(`[${this.must}]`);
         const langWords = words.find((m) => m.lang === el.lang).words;
 
         langWords.forEach((w) => {
@@ -139,9 +150,11 @@ mixins = mixins.concat([
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "");
 
-          if ((regMatch.test(withoutAccent)|| el.lettersEmpty) && 
-          (regIgnore.test(withoutAccent) || el.ignores.length === 0) && 
-          (regMust.test(withoutAccent) || el.must.length === 0)) {
+          if (
+            (regMatch.test(withoutAccent) || el.lettersEmpty) &&
+            (regIgnore.test(withoutAccent) || el.ignores.length === 0) &&
+            (regMust.test(withoutAccent) || el.must.length === 0)
+          ) {
             el.bestWords.push(w);
           }
         });
@@ -149,12 +162,12 @@ mixins = mixins.concat([
         el.noBestWord = el.bestWords.length === 0;
         el.dialogBestWords = true;
       },
-      t(key){
+      t(key) {
         return translations[this.lang][key];
-      }
+      },
     },
     mounted() {
-        this.lang = this.getCurrentLanguage().split('-')[0];
-    }
+      this.lang = this.getCurrentLanguage().split("-")[0];
+    },
   },
 ]);

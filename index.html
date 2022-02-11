@@ -2,140 +2,20 @@
 <html>
 
 <head>
-  <title>WordleTip</title>
+  <title>WordleTip - Helper to find words in Wordle</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
+  <meta name="keywords" content="wordle, termo, letreco">
+  <meta name="description" content="Helper to find words in Wordle">
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
-  <style>
-    .input {
-      text-align: center;
-      border: 3px solid rgb(172, 172, 172);
-      background-color: #fff;
-      color: rgb(136, 136, 136);
-      padding: 5px;
-      border-radius: 5px;
-      text-transform: uppercase;
-    }
-
-    .correct-letter {
-      font-size: 40px;
-      display: block;
-      float: left;
-      width: 80px;
-      height: 80px;
-      margin-left: 5px;
-    }
-
-    .input:hover {
-      cursor: text;
-    }
-
-    .input:hover,
-    .keyboard:hover {
-      opacity: 0.6;
-    }
-
-    .input.focus {
-      border-color: #00695c;
-      background-color: #dffdfa;
-    }
-
-    .input.ignore,
-    .input.must {
-      height: 50px;
-    }
-
-    .input.ignore .keyboard,
-    .input.must .keyboard {
-      height: 50px;
-      font-size: 20px;
-      line-height: 33px;
-      padding: 5px 10px;
-      margin-right: 5px;
-    }
-
-    .input.focus-ignore {
-      border-color: #e53935;
-      background-color: #ffe9e9;
-    }
-
-    .input.focus-must {
-      border-color: #FF8F00;
-      background-color: #fcedda;
-    }
-
-    .keyboard {
-      background-color: rgb(228 228 228);
-      color: rgb(149 149 149) !important;
-      padding: 5px 20px;
-      width: 76px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 30px;
-      line-height: 53px;
-      text-transform: uppercase;
-    }
-
-    .keyboard.ignore {
-      background-color: #e53935;
-      color: #fff !important;
-    }
-
-    .keyboard.match {
-      background-color: #00695c;
-      color: #fff !important;
-    }
-
-    .keyboard.must {
-      background-color: #FF8F00;
-      color: #fff !important;
-    }
-
-    .keyboard.green {
-      background-color: #00695C;
-      color: #fff !important;
-    }
-
-    .keyboard.dark {
-      background-color: rgb(207, 207, 207);
-      color: #fff !important;
-    }
-
-    @media only screen and (max-width: 600px) {
-      .correct-letter {
-        font-size: 40px;
-        width: 50px;
-        height: 50px;
-      }
-
-      .keyboard {
-        font-size: 20px;
-        line-height: 31px;
-        padding: 2px 7px;
-      }
-
-      .input.ignore .keyboard,
-      .input.must .keyboard {
-        font-size: 15px;
-        line-height: 20px;
-        padding: 5px 6px;
-        margin-right: 5px;
-      }
-
-      .input.ignore,
-      .input.must {
-        height: 39px;
-        margin-right: 2px;
-      }
-    }
-  </style>
+  <link href="css/main.css" rel="stylesheet"></link>
   <script>
     var mixins = [];
     var words = [];
@@ -165,15 +45,15 @@
                     {{ t('labelLetters') }}
                   </div>
                   <v-row justify="center">
-                    <input type="text" class="input correct-letter" v-model="letters.l1" @focus="inputFocus = 'l1'"
+                    <input type="text" class="input correct-letter" v-model="letters.l1" @click="setFocus('l1')"
                       :class="{'focus': inputFocus === 'l1'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l2" @focus="inputFocus = 'l2'"
+                    <input type="text" class="input correct-letter" v-model="letters.l2" @click="setFocus('l2')"
                       :class="{'focus': inputFocus === 'l2'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l3" @focus="inputFocus = 'l3'"
+                    <input type="text" class="input correct-letter" v-model="letters.l3" @click="setFocus('l3')"
                       :class="{'focus': inputFocus === 'l3'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l4" @focus="inputFocus = 'l4'"
+                    <input type="text" class="input correct-letter" v-model="letters.l4" @click="setFocus('l4')"
                       :class="{'focus': inputFocus === 'l4'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l5" @focus="inputFocus = 'l5'"
+                    <input type="text" class="input correct-letter" v-model="letters.l5" @click="setFocus('l5')"
                       :class="{'focus': inputFocus === 'l5'}" readonly />
                   </v-row>
                   <v-row justify="center">

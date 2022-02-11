@@ -8,7 +8,7 @@ var translations = {
     labelMust: 'Selecione as letras que devem conter na palavra, independente da ordem',
     useKeyboard: 'Use este teclado para selecionar as letras',
     settings: 'Configurações',
-    wordSuggestion: 'sugestão de palavras'
+    wordSuggestion: 'Sugestão de Palavras'
   },
   en: {
     searchWord: 'Search Words',
