@@ -16,7 +16,9 @@ mixins = mixins.concat([
         lang: "pt",
         inputFocus: "l1",
         noBestWord: false,
-        languages: [{value: 'pt', text: 'Português'}, {value: 'en', text: 'English'}]
+        languages: [{value: 'pt', text: 'Português'}, {value: 'en', text: 'English'}],
+        dialogConfig: false,
+        dialogBestWords: false
       };
     },
     computed: {
@@ -59,6 +61,7 @@ mixins = mixins.concat([
         this.letters.l5 = null;
         this.ignores = [];
         this.must = [];
+        this.inputFocus = 'l1'
       },
       toggleIgnore(letter) {
         if (this.inputFocus == "ignore") {
@@ -144,6 +147,7 @@ mixins = mixins.concat([
         });
 
         el.noBestWord = el.bestWords.length === 0;
+        el.dialogBestWords = true;
       },
       t(key){
         return translations[this.lang][key];

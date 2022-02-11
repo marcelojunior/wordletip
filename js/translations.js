@@ -6,7 +6,9 @@ var translations = {
     labelLetters: 'Selecione as letras na ordem correta',
     labelIgnores: 'Selecione as letras que não existem na palavra',
     labelMust: 'Selecione as letras que devem conter na palavra, independente da ordem',
-    useKeyboard: 'Use este teclado para selecionar as letras no campos acima'
+    useKeyboard: 'Use este teclado para selecionar as letras',
+    settings: 'Configurações',
+    wordSuggestion: 'sugestão de palavras'
   },
   en: {
     searchWord: 'Search Words',
@@ -15,6 +17,8 @@ var translations = {
     labelLetters: 'Select the letters in the correct order',
     labelIgnores: 'Select the letters that do not exist in the word ',
     labelMust: 'Select the letters that must contain in the word, without a specific order',
-    useKeyboard: 'Use this keyboard to select letters on the fields above'
+    useKeyboard: 'Use this keyboard to select the letters',
+    settings: 'Settings',
+    wordSuggestion: 'Word Suggestion'
   },
 };
