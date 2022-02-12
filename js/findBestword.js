@@ -168,20 +168,23 @@ mixins = mixins.concat([
           ) {
             el.bestWords.push(w);
           }
-        });
+        });        
 
         el.noBestWord = el.bestWords.length === 0;
-        el.dialogBestWords = true;
+        el.dialogBestWords = true; 
+        
         Rollbar.info('find_best_word', { 
-            lang: el.lang, 
-            matchLetterWithRegex: matchLetterWithRegex,            
-          })
+          lang: el.lang, 
+          matchLetterWithRegex: el.matchLetterWithRegex,            
+        })
+        
       },
       t(key) {
         return translations[this.lang][key];
       },
       sendNotFindWord(){
         const el = this;
+        gtag('event', 'not_find_word')
         Rollbar.warning('not_find_word', { 
           lang: el.lang, 
           word: el.sendWord 
