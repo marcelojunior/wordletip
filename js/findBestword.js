@@ -172,13 +172,20 @@ mixins = mixins.concat([
 
         el.noBestWord = el.bestWords.length === 0;
         el.dialogBestWords = true;
+        Rollbar.info('find_best_word', { 
+            lang: el.lang, 
+            matchLetterWithRegex: matchLetterWithRegex,            
+          })
       },
       t(key) {
         return translations[this.lang][key];
       },
       sendNotFindWord(){
         const el = this;
-        gtag('event', 'not_find_word', { 'word': el.sendWord })
+        Rollbar.warning('not_find_word', { 
+          lang: el.lang, 
+          word: el.sendWord 
+        })
         el.sendWord = null;
         el.snackbarMsg(el.t('wordSent'))
       },
