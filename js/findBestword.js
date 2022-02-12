@@ -28,7 +28,7 @@ mixins = mixins.concat([
         snackbarText: null,
       };
     },
-    computed: {
+    computed: {      
       keyboard() {
         return "q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m".split(",");
       },
@@ -61,6 +61,16 @@ mixins = mixins.concat([
       },
     },
     methods: {
+      getUserId(){
+        const userId = localStorage.getItem('userId');
+        if (!userId){
+          const id = Math.random().toString().replace('0.', '');
+          localStorage.setItem('userId', id)
+          return id;
+        }
+
+        return userId;
+      },
       getCurrentLanguage() {
         const currentLang = (navigator.language || navigator.userLanguage).toLowerCase().split('-')[0];
         const availableLanguages = words.map(m => m.lang);
@@ -173,7 +183,8 @@ mixins = mixins.concat([
         el.noBestWord = el.bestWords.length === 0;
         el.dialogBestWords = true; 
         
-        Rollbar.info('find_best_word', { 
+        const userId = el.getUserId();
+        Rollbar.info(`find_best_word ${userId}`, { 
           lang: el.lang, 
           matchLetterWithRegex: el.matchLetterWithRegex,            
         })
@@ -184,8 +195,9 @@ mixins = mixins.concat([
       },
       sendNotFindWord(){
         const el = this;
+        const userId = el.getUserId();
         gtag('event', 'not_find_word')
-        Rollbar.warning('not_find_word', { 
+        Rollbar.warning(`not_find_word ${userId}`, { 
           lang: el.lang, 
           word: el.sendWord 
         })
