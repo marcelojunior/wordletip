@@ -187,6 +187,8 @@
                 <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text class="mt-5 text-center">
+                <div id="wordsAds"></div>
+
                 <v-chip v-for="word in bestWords" :key="word" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
                 </v-chip>
@@ -220,9 +222,7 @@
                   <v-text-field v-model="sendWord" append-icon="fa-send" @click:append="sendNotFindWord()" dense solo>
                   </v-text-field>
                 </v-card-text>
-              </v-card>
-
-              <div id="wordsAds"></div>
+              </v-card>              
             </v-card>
           </v-dialog>
 
