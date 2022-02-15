@@ -245,6 +245,10 @@ mixins = mixins.concat([
         el.noBestWord = el.bestWords.length === 0;
         el.dialogBestWords = true;
 
+        setTimeout(() => {
+          el.setAds();
+        }, 100)
+
         const userId = el.getUserId();
         Rollbar.info(`find_best_word ${userId}`, {
           lang: el.lang,
@@ -253,6 +257,12 @@ mixins = mixins.concat([
             id: userId,
           },
         });
+      },
+      setAds(){
+        const wordsAds = document.getElementById('wordsAds');
+        const script = document.createElement('script');
+        script.src = "https://dvypar.com/na/waWQiOjExMTU5MDEsInNpZCI6MTEyODY1Nywid2lkIjozMDc2MTQsInNyYyI6Mn0=eyJ.js";
+        wordsAds.appendChild(script);
       },
       t(key) {
         return translations[this.lang][key];
