@@ -2,11 +2,11 @@
 sass --watch main.scss:main.min.css --style compressed
 */
 
-.input-container{
+.input-container {
   text-align: center;
   position: relative;
 
-  .input-column{
+  .input-column {
     display: inline-block;
     width: 50px;
     margin-right: 10px;
@@ -22,8 +22,8 @@ sass --watch main.scss:main.min.css --style compressed
   border-radius: 5px;
   text-transform: uppercase;
 
-  &.letter{
-    min-height: 65px;    
+  &.letter {
+    min-height: 65px;
     padding-bottom: 20px;
     position: absolute;
   }
@@ -48,7 +48,7 @@ sass --watch main.scss:main.min.css --style compressed
     background-color: #fcedda;
   }
 
-  &.must {    
+  &.must {
     width: 58px;
     text-align: center;
   }
@@ -115,33 +115,32 @@ sass --watch main.scss:main.min.css --style compressed
     background-color: #00695c;
     color: #fff !important;
   }
-  
+
   &.must {
     background-color: #ff8f00;
     color: #fff !important;
   }
-  
+
   &.green {
     background-color: #00695c;
     color: #fff !important;
   }
-  
+
   &.dark {
     background-color: rgb(207, 207, 207);
     color: #fff !important;
   }
-  
+
   &.help i {
     text-transform: none;
     font-size: 17px;
   }
 }
 
-
 .bmc-btn {
   min-width: 210px;
   color: #000000 !important;
-  background-color: #FFDD00 !important;
+  background-color: #ffdd00 !important;
   height: 60px;
   border-radius: 12px;
   font-size: 24px;
@@ -152,7 +151,7 @@ sass --watch main.scss:main.min.css --style compressed
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center;
-  font-family: 'Bree Serif', cursive !important;
+  font-family: "Bree Serif", cursive !important;
   -webkit-box-sizing: border-box !important;
   box-sizing: border-box !important;
 }
@@ -165,6 +164,15 @@ sass --watch main.scss:main.min.css --style compressed
   flex-shrink: 0;
 }
 
+.pre-copy {
+  border: 2px solid #8d8d8d;
+  background: #dbdbdb;
+  padding: 20px;
+  width: 506px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
 
 @media only screen and (max-width: 600px) {
   .correct-letter {
@@ -178,7 +186,7 @@ sass --watch main.scss:main.min.css --style compressed
     line-height: 42px;
     padding: 5px 8px;
   }
- 
+
   .input.ignore .keyboard,
   .input.must .keyboard {
     font-size: 15px;
@@ -188,7 +196,6 @@ sass --watch main.scss:main.min.css --style compressed
   }
 }
 
-
 @media only screen and (min-width: 1400px) {
   .correct-letter {
     font-size: 60px;
@@ -196,7 +203,7 @@ sass --watch main.scss:main.min.css --style compressed
     height: 80px;
   }
 
-  .keyboard{
+  .keyboard {
     font-size: 30px;
     line-height: 52px;
     padding: 5px 20px;

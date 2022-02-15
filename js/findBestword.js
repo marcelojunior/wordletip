@@ -87,7 +87,7 @@ mixins = mixins.concat([
           userId = Math.random().toString().replace("0.", "");
           localStorage.setItem("userId", userId);
         }
-        _rollbarConfig.payload.person.id = userId;
+        _rollbarConfig.payload.person.id = parseInt(userId);
         return userId;
       },
       getCurrentLanguage() {
@@ -130,7 +130,6 @@ mixins = mixins.concat([
           this.toggleMust(position, letter);
         } else {
           this.removeIgnore(letter);
-          this.removeMust(letter);
           if (this.letters[this.inputFocus] == letter) {
             this.letters[this.inputFocus] = null;
           } else {
@@ -148,7 +147,6 @@ mixins = mixins.concat([
         const idx = letterMust.letters.indexOf(letter);
         if (idx === -1) {
           this.removeIgnore(letter);
-          this.removeMatch(letter);
           letterMust.letters.push(letter);
         } else {
           letterMust.letters.splice(idx, 1);
@@ -292,6 +290,30 @@ mixins = mixins.concat([
           container.style.height = `${maxHeight + 20}px`;
         }, 50);
       },
+      copyText(text, event) {
+        const id = `copy-${(+new Date()).toString()}`
+        const copyText = document.createElement('textarea')
+        copyText.id = id
+        copyText.innerHTML = text;
+        copyText.style.position = 'absolute'
+        copyText.style.zIndex = '2147483648'
+        copyText.style.top = '0'
+        copyText.style.left = '0'
+        copyText.style.opacity = '0'
+        if (event) {
+          event.target.parentNode.insertBefore(copyText, event.target)
+        } else {
+          document.body.appendChild(copyText)
+        }
+        copyText.focus();
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+  
+        const alertMsg = this.t('copiedToClipboard');
+        this.snackbarMsg(alertMsg);
+        copyText.remove();
+      }
     },
     mounted() {
       this.lang = this.getCurrentLanguage();

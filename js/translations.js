@@ -17,7 +17,11 @@ var translations = {
     helpP4: 'Na última caixa, informe as letras que o jogo já informou que <strong>existem</strong> na palavra, mas estão na ordem errada. Insira a letra na <strong>ordem que você usou no jogo</strong> para o WordleTip ignorar esta posição.',
     notFindWord: 'A palavra correta não estava aqui? Nos informe qual era.',
     send: 'Enviar',
-    wordSent: 'Palavra enviada'
+    wordSent: 'Palavra enviada',
+    copy: 'Copiar',
+    copyTitle: 'Ou compartilhe este texto junto com seu resultado:',
+    copyText: 'Encontrei junto com https://www.wordletip.com.br',
+    copiedToClipboard: 'Copiado para área de transferência'
   },
   en: {
     searchWord: 'Search Words',
@@ -37,6 +41,10 @@ var translations = {
     helpP4: 'In the last box, enter the letters that the game has already reported <strong>exist</strong> in the word, but are in the wrong order. Enter the letter in the <strong>order you used in the game</strong> for WordleTip to ignore this position.',
     notFindWord: "Wasn't the correct word here? Let us know what it was.",
     send: 'Send',
-    wordSent: 'Word sent'
+    wordSent: 'Word sent',
+    copy: 'Copy',
+    copyTitle: 'Or share this text along with your result: ',
+    copyText: 'I found with https://www.wordletip.com.br',
+    copiedToClipboard: 'Copy to clipboard'
   },
 };

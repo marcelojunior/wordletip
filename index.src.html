@@ -203,6 +203,16 @@
                 </a>
               </div>
 
+              <div class="text-center mt-5 mb-5">
+                {{ t('copyTitle') }}
+                <div class="pre-copy">
+                  <v-btn @click="copyText(t('copyText'), $event)" small text>
+                    <v-icon small left>fa-copy</v-icon> {{ t('copy') }}
+                  </v-btn>
+                  <pre>{{ t('copyText') }}</pre>
+                </div>
+              </div>
+
               <v-divider></v-divider>
               <v-card flat>
                 <v-card-text>
