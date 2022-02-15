@@ -189,7 +189,7 @@
               <v-card-text class="mt-5 text-center">
                 <div id="wordsAds"></div>
 
-                <v-chip v-for="word in bestWords" :key="word" style="margin-left: 5px; margin-bottom: 5px" label>
+                <v-chip v-for="(word,i) in bestWords" :key="i" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
                 </v-chip>
 
