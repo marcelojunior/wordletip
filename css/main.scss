@@ -187,3 +187,18 @@ sass --watch main.scss:main.min.css --style compressed
     margin-right: 5px;
   }
 }
+
+
+@media only screen and (min-width: 1400px) {
+  .correct-letter {
+    font-size: 60px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .keyboard{
+    font-size: 30px;
+    line-height: 52px;
+    padding: 5px 20px;
+  }
+}
