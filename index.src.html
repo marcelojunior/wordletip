@@ -8,7 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"
     crossorigin="anonymous" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Bree+Serif&amp;display=swap" rel="stylesheet">
+
   <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
+
   <meta name="keywords" content="wordle, termo, letreco">
   <meta name="description" content="Helper to find words in Wordle">
   <meta charset="utf-8" />
@@ -184,7 +187,7 @@
                 <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text class="mt-5 text-center">
-                <v-chip v-for="word in bestWords" style="margin-left: 5px; margin-bottom: 5px" label>
+                <v-chip v-for="word in bestWords" :key="word" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
                 </v-chip>
 
@@ -192,6 +195,13 @@
                   {{ t('noBestWords') }}
                   </v-arlert>
               </v-card-text>
+
+              <div class="text-center mt-10 mb-10">
+                <a class="bmc-btn" target="_blank" href="https://www.buymeacoffee.com/marcelomachado">
+                  🍺
+                  <span class="bmc-btn-text">Buy me a beer</span>
+                </a>
+              </div>
 
               <v-divider></v-divider>
               <v-card flat>
