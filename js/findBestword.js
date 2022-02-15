@@ -10,7 +10,6 @@ mixins = mixins.concat([
           l5: null,
         },
         ignores: [],
-        must: [],
         breakeKeyboard: ["p", "l"],
         bestWords: [],
         lang: "pt",
@@ -26,9 +25,10 @@ mixins = mixins.concat([
         sendWord: null,
         snackbar: false,
         snackbarText: null,
+        lettersMust: [],
       };
     },
-    computed: {      
+    computed: {
       keyboard() {
         return "q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m".split(",");
       },
@@ -40,6 +40,9 @@ mixins = mixins.concat([
           this.letters.l4,
           this.letters.l5,
         ];
+      },
+      musts() {
+        return this.lettersMust.map((m) => m.letters).flat();
       },
       matchLetterWithRegex() {
         const el = this;
@@ -55,32 +58,50 @@ mixins = mixins.concat([
       disableSearch() {
         return (
           this.lettersEmpty &&
-          this.must.length === 0 &&
+          this.musts.length === 0 &&
           this.ignores.length === 0
         );
       },
     },
     methods: {
-      getUserId(){
-        const userId = localStorage.getItem('userId');
-        if (!userId){
-          const id = Math.random().toString().replace('0.', '');
-          localStorage.setItem('userId', id)
-          return id;
+      resetLetterMust(count) {
+        this.lettersMust = [];
+        for (let index = 0; index < count; index++) {
+          this.addLetter();
         }
 
+        this.resizeMustContainer();
+      },
+      addLetter() {
+        const el = this;
+        const currentCount = el.lettersMust.length;
+        el.lettersMust.push({
+          position: currentCount,
+          letters: [],
+        });
+      },
+
+      getUserId() {
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+          userId = Math.random().toString().replace("0.", "");
+          localStorage.setItem("userId", userId);
+        }
+        _rollbarConfig.payload.person.id = userId;
         return userId;
       },
       getCurrentLanguage() {
-        const currentLang = (navigator.language || navigator.userLanguage).toLowerCase().split('-')[0];
-        const availableLanguages = words.map(m => m.lang);
-        if (availableLanguages.includes(currentLang)){
+        const currentLang = (navigator.language || navigator.userLanguage)
+          .toLowerCase()
+          .split("-")[0];
+        const availableLanguages = words.map((m) => m.lang);
+        if (availableLanguages.includes(currentLang)) {
           return currentLang;
         }
 
-        return 'en';
+        return "en";
       },
-      setFocus(letter){
+      setFocus(letter) {
         this.letters[letter] = null;
         this.inputFocus = letter;
       },
@@ -91,10 +112,10 @@ mixins = mixins.concat([
         this.letters.l4 = null;
         this.letters.l5 = null;
         this.ignores = [];
-        this.must = [];
         this.inputFocus = "l1";
+        this.resetLetterMust(5);
       },
-      toggleIgnore(letter) {
+      toggleKeyboard(letter) {
         if (this.inputFocus == "ignore") {
           const idx = this.ignores.indexOf(letter);
           if (idx > -1) {
@@ -104,15 +125,9 @@ mixins = mixins.concat([
             this.removeMust(letter);
             this.removeMatch(letter);
           }
-        } else if (this.inputFocus == "must") {
-          const idx = this.must.indexOf(letter);
-          if (idx > -1) {
-            this.must.splice(idx, 1);
-          } else {
-            this.must.push(letter);
-            this.removeIgnore(letter);
-            this.removeMatch(letter);
-          }
+        } else if (this.inputFocus.includes("must-")) {
+          const position = this.inputFocus.split("-")[1];
+          this.toggleMust(position, letter);
         } else {
           this.removeIgnore(letter);
           this.removeMust(letter);
@@ -127,6 +142,19 @@ mixins = mixins.concat([
             this.inputFocus = `l${l + 1}`;
           }
         }
+      },
+      toggleMust(position, letter) {
+        const letterMust = this.lettersMust.find((m) => m.position == position);
+        const idx = letterMust.letters.indexOf(letter);
+        if (idx === -1) {
+          this.removeIgnore(letter);
+          this.removeMatch(letter);
+          letterMust.letters.push(letter);
+        } else {
+          letterMust.letters.splice(idx, 1);
+        }
+
+        this.resizeMustContainer();
       },
       removeMatch(letter) {
         const el = this;
@@ -143,10 +171,13 @@ mixins = mixins.concat([
         }
       },
       removeMust(letter) {
-        const idx = this.must.indexOf(letter);
-        if (idx > -1) {
-          this.must.splice(idx, 1);
-        }
+        this.lettersMust.forEach((l) => {
+          const idx = l.letters.indexOf(letter);
+          if (idx > -1) {
+            l.letters.splice(idx, 1);
+          }
+        });
+        this.resizeMustContainer();
       },
       letterOrHifen(str) {
         if (str === null || str.match(/^ *$/) !== null) {
@@ -155,62 +186,116 @@ mixins = mixins.concat([
         return str;
       },
       findBestWord() {
-        gtag('event', 'find_best_word')
+        gtag("event", "find_best_word");
         const el = this;
         this.bestWords = [];
-        const regMatch = new RegExp(
-          el.matchLetterWithRegex.replace(/\-/g, "\\w"),
-          "g"
-        );
-        const regIgnore = new RegExp(`^((?![${this.ignores}]).)*$`);
-        const regMust = new RegExp(`[${this.must}]`);
         const langWords = words.find((m) => m.lang === el.lang).words;
+        const regexes = [];
+
+        if (!el.lettersEmpty) {
+          regexes.push({
+            pattern: new RegExp(
+              el.matchLetterWithRegex.replace(/\-/g, "\\w"),
+              "g"
+            ),
+            expected: true,
+          });
+        }
+
+        if (el.ignores.length > 0) {
+          regexes.push({
+            pattern: new RegExp(`^((?![${this.ignores}]).)*$`),
+            expected: true,
+          });
+        }
+
+        el.lettersMust.forEach((must) => {
+          const arr = [...Array(el.lettersMust.length + 1).join("-")];
+          must.letters.forEach((letter) => {
+            arr[must.position] = letter;
+            const match = arr.join("");
+            regexes.push({
+              pattern: new RegExp(match.replace(/\-/g, "\\w"), "g"),
+              expected: false,
+            });
+
+            regexes.push({
+              pattern: new RegExp(`${letter}`),
+              expected: true,
+            });
+          });
+        });
 
         langWords.forEach((w) => {
           const withoutAccent = w
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
 
-          if (
-            (regMatch.test(withoutAccent) || el.lettersEmpty) &&
-            (regIgnore.test(withoutAccent) || el.ignores.length === 0) &&
-            (regMust.test(withoutAccent) || el.must.length === 0)
-          ) {
+          const tests = [];
+          regexes.forEach((r) =>{ 
+            r.pattern.lastIndex = 0;
+            const test = r.pattern.test(withoutAccent) === r.expected;
+            tests.push(test);                 
+          });
+
+          if (!tests.includes(false)) {
             el.bestWords.push(w);
           }
-        });        
+        });
 
         el.noBestWord = el.bestWords.length === 0;
-        el.dialogBestWords = true; 
-        
+        el.dialogBestWords = true;
+
         const userId = el.getUserId();
-        Rollbar.info(`find_best_word ${userId}`, { 
-          lang: el.lang, 
-          matchLetterWithRegex: el.matchLetterWithRegex,            
-        })
-        
+        Rollbar.info(`find_best_word ${userId}`, {
+          lang: el.lang,
+          matchLetterWithRegex: el.matchLetterWithRegex,
+          person: {
+            id: userId,
+          },
+        });
       },
       t(key) {
         return translations[this.lang][key];
       },
-      sendNotFindWord(){
+      sendNotFindWord() {
         const el = this;
         const userId = el.getUserId();
-        gtag('event', 'not_find_word')
-        Rollbar.warning(`not_find_word ${userId}`, { 
-          lang: el.lang, 
-          word: el.sendWord 
-        })
+        gtag("event", "not_find_word");
+        Rollbar.warning(`not_find_word ${userId}`, {
+          lang: el.lang,
+          word: el.sendWord,
+          person: {
+            id: userId,
+          },
+        });
         el.sendWord = null;
-        el.snackbarMsg(el.t('wordSent'))
+        el.snackbarMsg(el.t("wordSent"));
       },
-      snackbarMsg(msg){
+      snackbarMsg(msg) {
         this.snackbarText = msg;
         this.snackbar = true;
-      }
+      },
+      resizeMustContainer() {
+        setTimeout(() => {
+          const container = document.getElementById("must-container");
+          let maxHeight = 0;
+          container.childNodes.forEach((c) => {
+            c.childNodes.forEach((i) => {
+              if (i.offsetHeight > maxHeight) {
+                maxHeight = i.offsetHeight;
+              }
+            });
+          });
+
+          container.style.height = `${maxHeight + 20}px`;
+        }, 50);
+      },
     },
     mounted() {
       this.lang = this.getCurrentLanguage();
+      this.resetLetterMust(5);
     },
   },
 ]);

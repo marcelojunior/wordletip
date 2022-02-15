@@ -1,0 +1,160 @@
+/*
+sass --watch main.scss:main.min.css --style compressed
+*/
+
+.input-container{
+  text-align: center;
+  position: relative;
+
+  .input-column{
+    display: inline-block;
+    width: 50px;
+    margin-right: 10px;
+  }
+}
+
+.input {
+  text-align: center;
+  border: 3px solid rgb(172, 172, 172);
+  background-color: #fff;
+  color: rgb(136, 136, 136);
+  padding: 5px;
+  border-radius: 5px;
+  text-transform: uppercase;
+
+  &.letter{
+    min-height: 65px;    
+    padding-bottom: 20px;
+    position: absolute;
+  }
+
+  &:hover {
+    cursor: text;
+    opacity: 0.6;
+  }
+
+  &.focusCorrectLetter {
+    border-color: #00695c;
+    background-color: #dffdfa;
+  }
+
+  &.focus-ignore {
+    border-color: #e53935;
+    background-color: #ffe9e9;
+  }
+
+  &.focus-must {
+    border-color: #ff8f00;
+    background-color: #fcedda;
+  }
+
+  &.must {    
+    width: 58px;
+    text-align: center;
+  }
+
+  &.ignore {
+    height: 50px;
+    text-align: center;
+  }
+
+  &.ignore .keyboard,
+  &.must .keyboard {
+    font-size: 15px;
+    line-height: 33px;
+    padding: 0px 10px;
+    margin-right: 5px;
+    margin-bottom: 6px;
+    display: block;
+    float: left;
+    width: 35px;
+  }
+}
+
+.keyboard-container {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0px 0px 2px rgb(82, 82, 82);
+  padding-bottom: 20px;
+}
+
+.correct-letter {
+  font-size: 30px;
+  display: block;
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin-left: 5px;
+}
+
+.keyboard {
+  background-color: rgb(228 228 228);
+  color: rgb(149 149 149) !important;
+  padding: 5px 10px;
+  width: 76px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 35px;
+  text-transform: uppercase;
+  margin-right: 2px;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  &.ignore {
+    background-color: #e53935;
+    color: #fff !important;
+  }
+
+  &.match {
+    background-color: #00695c;
+    color: #fff !important;
+  }
+  
+  &.must {
+    background-color: #ff8f00;
+    color: #fff !important;
+  }
+  
+  &.green {
+    background-color: #00695c;
+    color: #fff !important;
+  }
+  
+  &.dark {
+    background-color: rgb(207, 207, 207);
+    color: #fff !important;
+  }
+  
+  &.help i {
+    text-transform: none;
+    font-size: 17px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .correct-letter {
+    font-size: 40px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .keyboard {
+    font-size: 23px;
+    line-height: 42px;
+    padding: 5px 8px;
+  }
+ 
+  .input.ignore .keyboard,
+  .input.must .keyboard {
+    font-size: 15px;
+    line-height: 20px;
+    padding: 5px 6px;
+    margin-right: 5px;
+  }
+}
