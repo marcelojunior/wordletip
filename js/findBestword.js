@@ -291,6 +291,11 @@ mixins = mixins.concat([
         }, 50);
       },
       copyText(text, event) {
+        gtag("event", "click_copy_text");
+        Rollbar.info(`click_copy_text ${userId}`, {
+          lang: el.lang,
+        });
+
         const id = `copy-${(+new Date()).toString()}`
         const copyText = document.createElement('textarea')
         copyText.id = id
