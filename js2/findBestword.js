@@ -271,7 +271,7 @@ mixins = mixins.concat([
         el.sendWord = null;
         el.snackbarMsg(el.t("wordSent"));
       },
-      snackbarMsg(msg) {
+      snackbarMsg(msg) { 
         this.snackbarText = msg;
         this.snackbar = true;
       },
