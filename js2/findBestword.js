@@ -291,6 +291,7 @@ mixins = mixins.concat([
         }, 50);
       },
       copyText(text, event) {
+        const userId = el.getUserId();
         gtag("event", "click_copy_text");
         Rollbar.info(`click_copy_text ${userId}`, {
           lang: el.lang,
