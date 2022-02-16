@@ -135,42 +135,25 @@
                     </v-row>
                   </v-container>
                   <v-container class="d-sm-none d-md-none d-lg-none">
-                    <v-menu>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn :color="keyboardSelectColor" v-on="on" dark rounded block>
-                          <v-icon left>fa-bars</v-icon>
-                          {{ keyboardSelectText }}
-                        </v-btn>
-                      </v-col>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="keyboardSetType(types.LetterCorrect)">
-                          <v-list-item-icon>
-                            <v-icon v-if="keyboardType === types.LetterCorrect">fa-check</v-icon>
-                            <v-icon v-else></v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-title>{{ t('letterCorrect') }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="keyboardSetType(types.LetterMust)">
-                          <v-list-item-icon>
-                            <v-icon v-if="keyboardType === types.LetterMust">fa-check</v-icon>
-                            <v-icon v-else></v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-title>{{ t('letterMust') }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="keyboardSetType(types.LetterIgnore)">
-                          <v-list-item-icon>
-                            <v-icon v-if="keyboardType === types.LetterIgnore">fa-check</v-icon>
-                            <v-icon v-else></v-icon>
-                          </v-list-item-icon>
-                          <v-list-item-title>{{ t('letterIgnore') }}</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
+           
+                      <v-btn color="#00695c" @click="keyboardSetType(types.LetterCorrect)" dark tile>
+                        <span v-if="keyboardType === types.LetterCorrect">{{ t('letterCorrect') }}</span>
+                        <v-icon v-else small>fa-play</v-icon>
+                      </v-btn>
+                      <v-btn color="#ff8f00" @click="keyboardSetType(types.LetterMust)" dark tile>
+                        <span v-if="keyboardType === types.LetterMust">{{ t('letterMust') }}</span>
+                        <v-icon v-else small>fa-play</v-icon>
+                      </v-btn>
+                      <v-btn color="#e53935" @click="keyboardSetType(types.LetterIgnore)" dark tile>
+                        <span v-if="keyboardType === types.LetterIgnore">{{ t('letterIgnore') }}</span>
+                        <v-icon v-else small>fa-play</v-icon>
+                      </v-btn>                  
                   </v-container>
                   <!-- KEYBOARD TYPES: FIM -->
+                  
                   <span v-for="k in keyboard">
-                    <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard" :class="{'keyboard-correct' : keyboardType === types.LetterCorrect, 'keyboard-must' : keyboardType === types.LetterMust, 'keyboard-ignore' : keyboardType === types.LetterIgnore}">{{k}}</a>
+                    <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard"
+                      :class="{'keyboard-correct' : keyboardType === types.LetterCorrect, 'keyboard-must' : keyboardType === types.LetterMust, 'keyboard-ignore' : keyboardType === types.LetterIgnore}">{{k}}</a>
                     <br v-if="breakeKeyboard.includes(k)" />
                   </span>
                   <span>
@@ -203,15 +186,13 @@
 
           <v-dialog v-model="dialogBestWords" fullscreen hide-overlay>
             <v-card fixed>
-              <v-toolbar dark color="primary">
+              <v-toolbar dense dark color="primary">
                 <v-btn icon dark @click="dialogBestWords = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text class="mt-5 text-center">
-                <div id="wordsAds"></div>
-
                 <v-chip v-for="(word,i) in bestWords" :key="i" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
                 </v-chip>
@@ -219,17 +200,18 @@
                 <v-alert v-if="noBestWord" border="left" type="warning" dense>
                   {{ t('noBestWords') }}
                   </v-arlert>
-              </v-card-text>              
+              </v-card-text>
 
-              <div class="text-center mt-5 mb-5">
-                {{ t('copyTitle') }}
-                <div class="pre-copy">
-                  <v-btn @click="copyText(t('copyText'), $event)" small text>
-                    <v-icon small left>fa-copy</v-icon> {{ t('copy') }}
-                  </v-btn>
-                  <pre>{{ t('copyText') }}</pre>
-                </div>
-              </div>
+                <v-container v-if="bestWords.length > 0">
+                  <v-card dense>
+                    <v-card-text class="text-center">
+                      <v-btn @click="copyText(t('copyText'), $event)" small text>
+                        <v-icon small left>fa-copy</v-icon> {{ t('copy') }}
+                      </v-btn>
+                      <div>{{ t('copyText') }}</div>
+                    </v-card-text>
+                  </v-card>
+                </v-container>
 
               <v-divider></v-divider>
               <v-card flat>
@@ -244,18 +226,19 @@
 
           <v-dialog v-model="dialogHelp" fullscreen hide-overlay>
             <v-card fixed>
-              <v-toolbar dark color="primary">
+              <v-toolbar dark dense color="primary">
                 <v-btn icon dark @click="dialogHelp = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>{{ t('whatIsThis') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text class="mt-5">
-                <p v-html="t('helpP1')"></p>
+                <p v-html="t('helpP1')" class="text-body-1"></p>
                 <h6 class="text-h6 font-weight-light">{{ t('helpHHowToUse') }}</h6>
-                <p v-html="t('helpP2')"></p>
-                <p v-html="t('helpP3')"></p>
-                <p v-html="t('helpP4')"></p>
+                <v-divider></v-divider>
+                <p v-html="t('helpP2')" class="text-body-1"></p>
+                <p v-html="t('helpP3')" class="text-body-1"></p>
+                <p v-html="t('helpP4')" class="text-body-1"></p>
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -276,12 +259,12 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" crossorigin="anonymous"></script>
 
-  <script src="js5/translations.js"></script>
-  <script src="js5/wordsEn.js"></script>
-  <script src="js5/wordsPt.js"></script>
-  <script src="js5/findBestword.js"></script>
+  <script src="js6/translations.js"></script>
+  <script src="js6/wordsEn.js"></script>
+  <script src="js6/wordsPt.js"></script>
+  <script src="js6/findBestword.js"></script>
 
-  <!-- <script src="js5.min.js"></script> -->
+  <!-- <script src="js6.min.js"></script> -->
 
   <script>
     const vue = new Vue({
