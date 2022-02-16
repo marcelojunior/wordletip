@@ -218,7 +218,7 @@ mixins = mixins.concat([
         const regexes = [];
 
         el.attempts.forEach((attempt) => {
-          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length > 0;
+          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length == el.lettersCount;
           if (someEmpty){
             return;
           }
