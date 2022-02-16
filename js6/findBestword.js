@@ -316,12 +316,12 @@ mixins = mixins.concat([
         });
       },
       setAds() {
-        // const wordsAds = document.getElementById("wordsAds");
-        // wordsAds.innerHTML = "";
-        // const script = document.createElement("script");
-        // script.src =
-        //   "https://dvypar.com/na/waWQiOjExMTU5MDEsInNpZCI6MTEyODY1Nywid2lkIjozMDc2MTQsInNyYyI6Mn0=eyJ.js";
-        // wordsAds.appendChild(script);
+        const wordsAds = document.getElementById("wordsAds");
+        wordsAds.innerHTML = "";
+        const script = document.createElement("script");
+        script.src =
+          "https://dvypar.com/na/waWQiOjExMTU5MDEsInNpZCI6MTEyODY1Nywid2lkIjozMDc2MTQsInNyYyI6Mn0=eyJ.js";
+        wordsAds.appendChild(script);
       },
       t(key) {
         return translations[this.lang][key];
