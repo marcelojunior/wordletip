@@ -111,17 +111,6 @@ mixins = mixins.concat([
 
         return this.attempts[attemptIndex].letters.filter(m => m.type === this.types.LetterCorrect).length === this.lettersCount;
       },
-      someEmpty(attemptIndex){
-        if (attemptIndex < 0){
-          return false;
-        }
-
-        if (!this.attempts[attemptIndex]){
-          return false;
-        }
-
-        return this.attempts[attemptIndex].letters.filter(m => m.type === this.types.LetterEmpty).length > 0;
-      },
       backspace() {
         const attempt = this.getCurrentAttempt();
         const position = this.getCurrentPosition();
@@ -229,6 +218,11 @@ mixins = mixins.concat([
         const regexes = [];
 
         el.attempts.forEach((attempt) => {
+          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length > 0;
+          if (someEmpty){
+            return;
+          }
+
           el.addRegex(
             regexes,
             attempt,
