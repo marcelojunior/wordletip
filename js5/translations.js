@@ -21,7 +21,10 @@ var translations = {
     copy: 'Copiar',
     copyTitle: 'Ou compartilhe este texto junto com seu resultado:',
     copyText: 'Encontrei junto com https://www.wordletip.com.br',
-    copiedToClipboard: 'Copiado para área de transferência'
+    copiedToClipboard: 'Copiado para área de transferência',
+    letterCorrect: 'Letra Correta',
+    letterMust: 'Letra Presente',
+    letterIgnore: 'Letra Errada',
   },
   en: {
     searchWord: 'Search Words',
@@ -45,6 +48,9 @@ var translations = {
     copy: 'Copy',
     copyTitle: 'Or share this text along with your result: ',
     copyText: 'I found with https://www.wordletip.com.br',
-    copiedToClipboard: 'Copy to clipboard'
+    copiedToClipboard: 'Copy to clipboard',
+    letterCorrect: 'Correct letter',
+    letterMust: 'In the word',
+    letterIgnore: 'Wrong Letter',
   },
 };

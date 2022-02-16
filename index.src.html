@@ -64,98 +64,121 @@
           <v-row justify="center">
             <v-col sm="12" md="8">
               <v-card>
+                <v-card-title>
+                  <v-spacer></v-spacer>
+                  <v-btn @click="clear()" icon small>
+                    <v-icon small>fa-broom</v-icon>
+                  </v-btn>
+                  <v-btn @click="dialogConfig = true" icon small>
+                    <v-icon small>fa-cog</v-icon>
+                  </v-btn>
+                </v-card-title>
                 <v-card-text>
-                  <!-- MATCH -->
-                  <div class="text-h7 font-weight-light text-center mb-5">
-                    {{ t('labelLetters') }}
-                  </div>
-                  <v-row justify="center">
-                    <input type="text" class="input correct-letter" v-model="letters.l1" @click="setFocus('l1')"
-                      :class="{'focusCorrectLetter': inputFocus === 'l1'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l2" @click="setFocus('l2')"
-                      :class="{'focusCorrectLetter': inputFocus === 'l2'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l3" @click="setFocus('l3')"
-                      :class="{'focusCorrectLetter': inputFocus === 'l3'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l4" @click="setFocus('l4')"
-                      :class="{'focusCorrectLetter': inputFocus === 'l4'}" readonly />
-                    <input type="text" class="input correct-letter" v-model="letters.l5" @click="setFocus('l5')"
-                      :class="{'focusCorrectLetter': inputFocus === 'l5'}" readonly />
+                  <!-- ATTEMPTS -->
+                  <v-row justify="center" style="margin-bottom: 1px;" v-for="attempt in attempts">
+                    <input type="text" v-for="letter in attempt.letters" class="input"
+                      :class="{'input-correct': letter.type === types.LetterCorrect, 'input-must': letter.type === types.LetterMust, 'input-ignore': letter.type === types.LetterIgnore, 'focus': inputFocus.concat === `${attempt.attempt}${letter.position}`}"
+                      v-model="letter.letter" @click="setFocus(attempt.attempt,letter.position)" readonly />
                   </v-row>
-                  <!-- MATCH: FIM -->
+                  <!-- ATTEMPTS: FIM -->
 
-                  <!-- IGNORE -->
                   <v-row justify="center">
-                    <v-col cols="12" justify="center">
-                      <div class="text-h7 font-weight-light text-center">
-                        {{ t('labelIgnores') }}
-                      </div>
-                      <div class="input ignore" @click="inputFocus = 'ignore'"
-                        :class="{'focus-ignore': inputFocus === 'ignore'}">
-                        <span v-for="k in ignores">
-                          <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard ignore">{{k}}</a>
-                        </span>
-                      </div>
+                    <v-col md="5" sm="12">
+                      <v-btn @click="dialogHelp = true" small block text>
+                        {{ t('whatIsThis') }}
+                      </v-btn>
                     </v-col>
                   </v-row>
-                  <!-- IGNORE: FIM -->
-
-                  <!-- MUST -->
-                  <v-row justify="center">
-                    <v-col cols="12" justify="center">
-                      <div class="text-h7 font-weight-light text-center">
-                        {{ t('labelMust') }}
-                      </div>
-                      <div class="input-container" id="must-container">
-                        <div class="input-column" v-for="input in lettersMust">
-                          <div class="input must letter" @click="inputFocus = `must-${input.position}`"
-                            :class="{'focus-must': inputFocus === `must-${input.position}`}">
-                            <span v-for="k in input.letters">
-                              <a href="javascript:void(0)" @click="toggleMust(input.position, k)"
-                                class="keyboard must">{{k}}</a>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row>
-
-                  <!-- MUST: FIM -->
                 </v-card-text>
               </v-card>
             </v-col>
           </v-row>
 
-          <div style="height: 262px;"></div>
+          <div class="text-center mt-10 mb-10">
+            <a class="bmc-btn" target="_blank" href="https://www.buymeacoffee.com/marcelomachado">
+              🍺
+              <span class="bmc-btn-text">Buy me a beer</span>
+            </a>
+          </div>
+
+          <div style="height: 236px;"></div>
 
           <!-- KEYBOARD -->
           <div class="keyboard-container">
             <v-row justify="center">
-              <v-col sm="12" md="8">
+              <v-col xl="8" md="12">
                 <div class="text-center">
-
-                  <div class="text-h7 font-weight-light text-center">
-                    {{ t('useKeyboard') }}
-                  </div>
+                  <!-- KEYBOARD TYPES -->
+                  <v-container class="d-none d-md-flex d-md-none">
+                    <v-row justify="center">
+                      <v-col lg="2" md="4">
+                        <v-btn color="#00695c" @click="keyboardSetType(types.LetterCorrect)" dark rounded block>
+                          <v-icon left v-if="keyboardType === types.LetterCorrect">fa-check</v-icon>
+                          <v-icon left v-else></v-icon>
+                          {{ t('letterCorrect') }}
+                        </v-btn>
+                      </v-col>
+                      <v-col lg="2" md="4">
+                        <v-btn color="#ff8f00" @click="keyboardSetType(types.LetterMust)" dark rounded block>
+                          <v-icon left v-if="keyboardType === types.LetterMust">fa-check</v-icon>
+                          <v-icon left v-else></v-icon>
+                          {{ t('letterMust') }}
+                        </v-btn>
+                      </v-col>
+                      <v-col lg="2" md="4">
+                        <v-btn color="#e53935" @click="keyboardSetType(types.LetterIgnore)" dark rounded block>
+                          <v-icon left v-if="keyboardType === types.LetterIgnore">fa-check</v-icon>
+                          <v-icon left v-else></v-icon>
+                          {{ t('letterIgnore') }}
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <v-container class="d-sm-none d-md-none d-lg-none">
+                    <v-menu>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn :color="keyboardSelectColor" v-on="on" dark rounded block>
+                          <v-icon left>fa-bars</v-icon>
+                          {{ keyboardSelectText }}
+                        </v-btn>
+                      </v-col>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="keyboardSetType(types.LetterCorrect)">
+                          <v-list-item-icon>
+                            <v-icon v-if="keyboardType === types.LetterCorrect">fa-check</v-icon>
+                            <v-icon v-else></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>{{ t('letterCorrect') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="keyboardSetType(types.LetterMust)">
+                          <v-list-item-icon>
+                            <v-icon v-if="keyboardType === types.LetterMust">fa-check</v-icon>
+                            <v-icon v-else></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>{{ t('letterMust') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="keyboardSetType(types.LetterIgnore)">
+                          <v-list-item-icon>
+                            <v-icon v-if="keyboardType === types.LetterIgnore">fa-check</v-icon>
+                            <v-icon v-else></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>{{ t('letterIgnore') }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-container>
+                  <!-- KEYBOARD TYPES: FIM -->
                   <span v-for="k in keyboard">
-                    <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard"
-                      :class='{"ignore": ignores.includes(k), "match": matches.includes(k), "must": musts.includes(k)}'>{{k}}</a>
+                    <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard" :class="{'keyboard-correct' : keyboardType === types.LetterCorrect, 'keyboard-must' : keyboardType === types.LetterMust, 'keyboard-ignore' : keyboardType === types.LetterIgnore}">{{k}}</a>
                     <br v-if="breakeKeyboard.includes(k)" />
                   </span>
                   <span>
                     <a href="javascript:void(0)" class="keyboard green" @click="findBestWord()">
                       <i class="fa fa-check"></i>
                     </a>
-                  </span>
-                  <br />
-                  <span>
-                    <a href="javascript:void(0)" class="keyboard dark" @click="clear()">
-                      <i class="fa fa-broom"></i>
-                    </a>
-                    <a href="javascript:void(0)" class="keyboard dark" @click="dialogConfig = true">
-                      <i class="fa fa-cog"></i>
-                    </a>
-                    <a href="javascript:void(0)" class="keyboard" @click="dialogHelp = true">
-                      {{ t('whatIsThis') }}
+                    <a href="javascript:void(0)" class="keyboard dark" @click="backspace()">
+                      <i class="fa fa-backspace"></i>
                     </a>
                   </span>
                 </div>
@@ -196,14 +219,7 @@
                 <v-alert v-if="noBestWord" border="left" type="warning" dense>
                   {{ t('noBestWords') }}
                   </v-arlert>
-              </v-card-text>
-
-              <div class="text-center mt-10 mb-10">
-                <a class="bmc-btn" target="_blank" href="https://www.buymeacoffee.com/marcelomachado">
-                  🍺
-                  <span class="bmc-btn-text">Buy me a beer</span>
-                </a>
-              </div>
+              </v-card-text>              
 
               <div class="text-center mt-5 mb-5">
                 {{ t('copyTitle') }}
@@ -222,7 +238,7 @@
                   <v-text-field v-model="sendWord" append-icon="fa-send" @click:append="sendNotFindWord()" dense solo>
                   </v-text-field>
                 </v-card-text>
-              </v-card>              
+              </v-card>
             </v-card>
           </v-dialog>
 
@@ -259,7 +275,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" crossorigin="anonymous"></script>
-  <script src="js5.min.js"></script>
+
+  <script src="js5/translations.js"></script>
+  <script src="js5/wordsEn.js"></script>
+  <script src="js5/wordsPt.js"></script>
+  <script src="js5/findBestword.js"></script>
+
+  <!-- <script src="js5.min.js"></script> -->
 
   <script>
     const vue = new Vue({

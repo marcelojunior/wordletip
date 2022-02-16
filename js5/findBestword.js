@@ -1,19 +1,22 @@
+
 mixins = mixins.concat([
   {
     data() {
       return {
-        letters: {
-          l1: null,
-          l2: null,
-          l3: null,
-          l4: null,
-          l5: null,
+        types: {
+          LetterEmpty: 0,
+          LetterCorrect: 1,
+          LetterMust: 2,
+          LetterIgnore: 3
         },
-        ignores: [],
         breakeKeyboard: ["p", "l"],
         bestWords: [],
         lang: "pt",
-        inputFocus: "l1",
+        inputFocus: {
+          concat: 01,
+          attempt: 0,
+          position: 0,
+        },
         noBestWord: false,
         languages: [
           { value: "pt", text: "Português" },
@@ -26,61 +29,87 @@ mixins = mixins.concat([
         snackbar: false,
         snackbarText: null,
         lettersMust: [],
+        attempts: [],
+        lettersCount: 5,
+        keyboardType: 1,
       };
     },
     computed: {
       keyboard() {
         return "q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m".split(",");
+      },  
+      keyboardSelectColor(){
+        if (this.keyboardType == this.types.LetterCorrect){
+          return "#00695c";
+        } else if (this.keyboardType == this.types.LetterMust){
+          return "#ff8f00";
+        }else if (this.keyboardType == this.types.LetterIgnore){
+          return "#e53935";
+        }
       },
-      matches() {
-        return [
-          this.letters.l1,
-          this.letters.l2,
-          this.letters.l3,
-          this.letters.l4,
-          this.letters.l5,
-        ];
-      },
-      musts() {
-        return this.lettersMust.map((m) => m.letters).flat();
-      },
-      matchLetterWithRegex() {
-        const el = this;
-        return `${el.letterOrHifen(this.letters.l1)}${el.letterOrHifen(
-          this.letters.l2
-        )}${el.letterOrHifen(this.letters.l3)}${el.letterOrHifen(
-          this.letters.l4
-        )}${el.letterOrHifen(this.letters.l5)}`;
-      },
-      lettersEmpty() {
-        return this.matchLetterWithRegex == "-----";
-      },
-      disableSearch() {
-        return (
-          this.lettersEmpty &&
-          this.musts.length === 0 &&
-          this.ignores.length === 0
-        );
-      },
+      keyboardSelectText(){
+        if (this.keyboardType == this.types.LetterCorrect){
+          return this.t('letterCorrect');
+        } else if (this.keyboardType == this.types.LetterMust){
+          return this.t('letterMust');
+        }else if (this.keyboardType == this.types.LetterIgnore){
+          return this.t('letterIgnore');
+        }
+      }
     },
     methods: {
-      resetLetterMust(count) {
-        this.lettersMust = [];
-        for (let index = 0; index < count; index++) {
-          this.addLetter();
+      addAttempt(){
+        const el = this;
+        const letters = []
+        for (let i = 0; i < el.lettersCount; i++) {
+          letters.push({            
+            position: i,
+            letter: null,
+            type: el.types.LetterEmpty
+          })      
         }
 
-        this.resizeMustContainer();
+        el.attempts.push({
+          attempt: el.attempts.length,
+          letters: letters
+        })
+        el.setFocus(el.attempts.length - 1, 0)
       },
-      addLetter() {
-        const el = this;
-        const currentCount = el.lettersMust.length;
-        el.lettersMust.push({
-          position: currentCount,
-          letters: [],
-        });
+      clear(){
+        this.attempts = [];
+        this.addAttempt();
       },
-
+      getCurrentPosition(){
+        const attempt = this.getCurrentAttempt();
+        const position = attempt.letters.find(m => m.position === this.inputFocus.position);
+        return position
+      },
+      getCurrentAttempt(){
+        return this.attempts[this.inputFocus.attempt];
+      },
+      backspace(){
+        const attempt = this.getCurrentAttempt();
+        const position = this.getCurrentPosition();
+        position.letter = null;
+        position.type = this.types.lettersEmpty;
+        if (position.position === 0){          
+          if (attempt.attempt > 0){
+            this.setFocus(attempt.attempt - 1, attempt.letters.length - 1)
+            this.attempts.splice(attempt.attempt, 1)
+          }          
+        } else {
+          this.setFocus(attempt.attempt, position.position - 1)
+        }
+      },
+      setFocus(attempt, position){
+        this.inputFocus.concat = `${attempt}${position}`;
+        this.inputFocus.attempt = attempt;
+        this.inputFocus.position = position;        
+      },
+      toggleType(type){
+        const position = this.getCurrentPosition();
+        position.type = type;
+      },
       getUserId() {
         let userId = localStorage.getItem("userId");
         if (!userId) {
@@ -101,87 +130,21 @@ mixins = mixins.concat([
 
         return "en";
       },
-      setFocus(letter) {
-        this.letters[letter] = null;
-        this.inputFocus = letter;
+      keyboardSetType(type){
+        this.keyboardType = type;
+        const position = this.getCurrentPosition();
+        position.type = this.keyboardType;
       },
-      clear() {
-        this.letters.l1 = null;
-        this.letters.l2 = null;
-        this.letters.l3 = null;
-        this.letters.l4 = null;
-        this.letters.l5 = null;
-        this.ignores = [];
-        this.inputFocus = "l1";
-        this.resetLetterMust(5);
-      },
-      toggleKeyboard(letter) {
-        if (this.inputFocus == "ignore") {
-          const idx = this.ignores.indexOf(letter);
-          if (idx > -1) {
-            this.ignores.splice(idx, 1);
-          } else {
-            this.ignores.push(letter);
-            this.removeMust(letter);
-            this.removeMatch(letter);
-          }
-        } else if (this.inputFocus.includes("must-")) {
-          const position = this.inputFocus.split("-")[1];
-          this.toggleMust(position, letter);
+      toggleKeyboard(letter){
+        const position = this.getCurrentPosition();
+        position.letter = letter;
+        position.type = this.keyboardType;
+        if (this.inputFocus.position < (this.lettersCount-1)){
+          this.setFocus(this.inputFocus.attempt, this.inputFocus.position + 1);
         } else {
-          this.removeIgnore(letter);
-          if (this.letters[this.inputFocus] == letter) {
-            this.letters[this.inputFocus] = null;
-          } else {
-            this.letters[this.inputFocus] = letter;
-          }
+          this.addAttempt();
 
-          if (this.inputFocus !== "l5") {
-            const l = parseInt(this.inputFocus.replace("l", ""));
-            this.inputFocus = `l${l + 1}`;
-          }
         }
-      },
-      toggleMust(position, letter) {
-        const letterMust = this.lettersMust.find((m) => m.position == position);
-        const idx = letterMust.letters.indexOf(letter);
-        if (idx === -1) {
-          this.removeIgnore(letter);
-          letterMust.letters.push(letter);
-        } else {
-          letterMust.letters.splice(idx, 1);
-        }
-
-        this.resizeMustContainer();
-      },
-      removeMatch(letter) {
-        const el = this;
-        [1, 2, 3, 4, 5].forEach((i) => {
-          if (el.letters[`l${i}`] === letter) {
-            el.letters[`l${i}`] = null;
-          }
-        });
-      },
-      removeIgnore(letter) {
-        const idx = this.ignores.indexOf(letter);
-        if (idx > -1) {
-          this.ignores.splice(idx, 1);
-        }
-      },
-      removeMust(letter) {
-        this.lettersMust.forEach((l) => {
-          const idx = l.letters.indexOf(letter);
-          if (idx > -1) {
-            l.letters.splice(idx, 1);
-          }
-        });
-        this.resizeMustContainer();
-      },
-      letterOrHifen(str) {
-        if (str === null || str.match(/^ *$/) !== null) {
-          return "-";
-        }
-        return str;
       },
       findBestWord() {
         gtag("event", "find_best_word");
@@ -286,21 +249,7 @@ mixins = mixins.concat([
         this.snackbarText = msg;
         this.snackbar = true;
       },
-      resizeMustContainer() {
-        setTimeout(() => {
-          const container = document.getElementById("must-container");
-          let maxHeight = 0;
-          container.childNodes.forEach((c) => {
-            c.childNodes.forEach((i) => {
-              if (i.offsetHeight > maxHeight) {
-                maxHeight = i.offsetHeight;
-              }
-            });
-          });
 
-          container.style.height = `${maxHeight + 20}px`;
-        }, 50);
-      },
       copyText(text, event) {
         const el = this;
         const userId = el.getUserId();
@@ -335,7 +284,7 @@ mixins = mixins.concat([
     },
     mounted() {
       this.lang = this.getCurrentLanguage();
-      this.resetLetterMust(5);
+      this.clear();
     },
   },
 ]);

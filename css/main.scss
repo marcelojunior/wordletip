@@ -2,15 +2,19 @@
 sass --watch main.scss:main.min.css --style compressed
 */
 
-.input-container {
-  text-align: center;
-  position: relative;
+$correct-dark: #00695c;
+$correct-light: #dffdfa;
+$must-dark: #ff8f00;
+$must-light: #fcedda;
+$ignore-dark: #e53935;
+$ignore-light: #ffe9e9;
 
-  .input-column {
-    display: inline-block;
-    width: 50px;
-    margin-right: 10px;
-  }
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+
+#app {
+  background-color: #eee;
 }
 
 .input {
@@ -21,54 +25,40 @@ sass --watch main.scss:main.min.css --style compressed
   padding: 5px;
   border-radius: 5px;
   text-transform: uppercase;
-
-  &.letter {
-    min-height: 65px;
-    padding-bottom: 20px;
-    position: absolute;
-  }
+  font-size: 30px;
+  display: block;
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin-left: 5px;
 
   &:hover {
     cursor: text;
     opacity: 0.6;
   }
 
-  &.focusCorrectLetter {
-    border-color: #00695c;
-    background-color: #dffdfa;
+  &.focus{
+    border-bottom-width: 6px;
   }
 
-  &.focus-ignore {
-    border-color: #e53935;
-    background-color: #ffe9e9;
+  &.input-correct {
+    border-color: $correct-dark;
+    color: $correct-dark;
+    background-color: $correct-light;
+    
   }
 
-  &.focus-must {
-    border-color: #ff8f00;
-    background-color: #fcedda;
+  &.input-must {
+    border-color: $must-dark;
+    color: $must-dark;
+    background-color: $must-light;
   }
 
-  &.must {
-    width: 58px;
-    text-align: center;
-  }
-
-  &.ignore {
-    height: 50px;
-    text-align: center;
-  }
-
-  &.ignore .keyboard,
-  &.must .keyboard {
-    font-size: 15px;
-    line-height: 33px;
-    padding: 0px 10px;
-    margin-right: 5px;
-    margin-bottom: 6px;
-    display: block;
-    float: left;
-    width: 35px;
-  }
+  &.input-ignore {
+    border-color: $ignore-dark;
+    color: $ignore-dark;
+    background-color: $ignore-light;
+  }  
 }
 
 .keyboard-container {
@@ -81,18 +71,10 @@ sass --watch main.scss:main.min.css --style compressed
   padding-bottom: 20px;
 }
 
-.correct-letter {
-  font-size: 30px;
-  display: block;
-  float: left;
-  width: 50px;
-  height: 50px;
-  margin-left: 5px;
-}
-
 .keyboard {
   background-color: rgb(228 228 228);
   color: rgb(149 149 149) !important;
+  border: 2px solid rgb(149 149 149);
   padding: 5px 10px;
   width: 76px;
   border-radius: 4px;
@@ -101,29 +83,34 @@ sass --watch main.scss:main.min.css --style compressed
   line-height: 35px;
   text-transform: uppercase;
   margin-right: 2px;
+  margin-bottom: 2px;
 
   &:hover {
     opacity: 0.6;
   }
 
-  &.ignore {
-    background-color: #e53935;
-    color: #fff !important;
+  &.keyboard-correct {
+    background-color: $correct-light;
+    color: $correct-dark !important;
+    border: 2px solid $correct-dark;
   }
 
-  &.match {
-    background-color: #00695c;
-    color: #fff !important;
+  &.keyboard-must {
+    background-color: $must-light;
+    color: $must-dark !important;
+    border: 2px solid $must-dark;
   }
 
-  &.must {
-    background-color: #ff8f00;
-    color: #fff !important;
+  &.keyboard-ignore {
+    background-color: $ignore-light;
+    color: $ignore-dark !important;
+    border: 2px solid $ignore-dark;
   }
 
   &.green {
     background-color: #00695c;
     color: #fff !important;
+    border: 2px solid #002c28;
   }
 
   &.dark {
@@ -202,17 +189,9 @@ sass --watch main.scss:main.min.css --style compressed
   }
 
   .keyboard {
-    font-size: 23px;
+    font-size: 19px;
     line-height: 42px;
-    padding: 5px 8px;
-  }
-
-  .input.ignore .keyboard,
-  .input.must .keyboard {
-    font-size: 15px;
-    line-height: 20px;
-    padding: 5px 6px;
-    margin-right: 5px;
+    padding: 4px 7px;
   }
 
   #wordsAds{
@@ -222,15 +201,15 @@ sass --watch main.scss:main.min.css --style compressed
 }
 
 @media only screen and (min-width: 1400px) {
-  .correct-letter {
-    font-size: 60px;
-    width: 80px;
-    height: 80px;
-  }
-
   .keyboard {
     font-size: 30px;
     line-height: 52px;
     padding: 5px 20px;
+  }
+
+  .input{
+    width: 80px;
+    height: 80px;
+    font-size: 60px;
   }
 }
