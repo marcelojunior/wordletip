@@ -55,17 +55,38 @@ mixins = mixins.concat([
           return this.t("letterIgnore");
         }
       },
-      allCorrectLetters(){
+      allCorrectLetters() {
         const el = this;
-        return el.attempts.map(m => m.letters.filter(mf => mf.type === el.types.LetterCorrect).map(l => l.letter).filter(f => f)).flat()
+        return el.attempts
+          .map((m) =>
+            m.letters
+              .filter((mf) => mf.type === el.types.LetterCorrect)
+              .map((l) => l.letter)
+              .filter((f) => f)
+          )
+          .flat();
       },
-      allMustLetters(){
+      allMustLetters() {
         const el = this;
-        return el.attempts.map(m => m.letters.filter(mf => mf.type === el.types.LetterMust).map(l => l.letter).filter(f => f)).flat()
+        return el.attempts
+          .map((m) =>
+            m.letters
+              .filter((mf) => mf.type === el.types.LetterMust)
+              .map((l) => l.letter)
+              .filter((f) => f)
+          )
+          .flat();
       },
-      allIgnoreLetters(){
+      allIgnoreLetters() {
         const el = this;
-        return el.attempts.map(m => m.letters.filter(mf => mf.type === el.types.LetterIgnore).map(l => l.letter).filter(f => f)).flat()
+        return el.attempts
+          .map((m) =>
+            m.letters
+              .filter((mf) => mf.type === el.types.LetterIgnore)
+              .map((l) => l.letter)
+              .filter((f) => f)
+          )
+          .flat();
       },
     },
     methods: {
@@ -100,16 +121,20 @@ mixins = mixins.concat([
       getCurrentAttempt() {
         return this.attempts[this.inputFocus.attempt];
       },
-      isAttemptCorrect(attemptIndex){
-        if (attemptIndex < 0){
+      isAttemptCorrect(attemptIndex) {
+        if (attemptIndex < 0) {
           return false;
         }
 
-        if (!this.attempts[attemptIndex]){
+        if (!this.attempts[attemptIndex]) {
           return false;
         }
 
-        return this.attempts[attemptIndex].letters.filter(m => m.type === this.types.LetterCorrect).length === this.lettersCount;
+        return (
+          this.attempts[attemptIndex].letters.filter(
+            (m) => m.type === this.types.LetterCorrect
+          ).length === this.lettersCount
+        );
       },
       backspace() {
         const attempt = this.getCurrentAttempt();
@@ -132,7 +157,7 @@ mixins = mixins.concat([
       setFocus(attempt, position) {
         this.inputFocus.concat = `${attempt}${position}`;
         this.inputFocus.attempt = attempt;
-        this.inputFocus.position = position;        
+        this.inputFocus.position = position;
       },
       toggleType(type) {
         const position = this.getCurrentPosition();
@@ -174,14 +199,19 @@ mixins = mixins.concat([
         }
 
         // Se a posição superior for correta, já preeche
-        if (this.inputFocus.attempt > 0 && !this.isAttemptCorrect(this.inputFocus.attempt -1)){
-          const lastAttempt = this.attempts[this.inputFocus.attempt -1];
-          const lastPosition = lastAttempt.letters.find(m => m.position == this.inputFocus.position);
-          if (lastPosition.type === this.types.LetterCorrect){
+        if (
+          this.inputFocus.attempt > 0 &&
+          !this.isAttemptCorrect(this.inputFocus.attempt - 1)
+        ) {
+          const lastAttempt = this.attempts[this.inputFocus.attempt - 1];
+          const lastPosition = lastAttempt.letters.find(
+            (m) => m.position == this.inputFocus.position
+          );
+          if (lastPosition.type === this.types.LetterCorrect) {
             const tmpKeyboardType = this.keyboardType;
             this.keyboardSetType(this.types.LetterCorrect);
-            this.toggleKeyboard(lastPosition.letter) 
-            this.keyboardSetType(tmpKeyboardType); 
+            this.toggleKeyboard(lastPosition.letter);
+            this.keyboardSetType(tmpKeyboardType);
           }
         }
       },
@@ -204,9 +234,14 @@ mixins = mixins.concat([
           }
         });
 
+        let pattern = new RegExp(letters.join(""), "g");
+        if (title === "inTheWord") {
+          pattern = new RegExp(`[${letters.join("")}]`, "g");
+        }
+
         regexes.push({
           title: title,
-          pattern: new RegExp(letters.join(""), "g"),
+          pattern: pattern,
           expected: expected,
         });
       },
@@ -218,8 +253,10 @@ mixins = mixins.concat([
         const regexes = [];
 
         el.attempts.forEach((attempt) => {
-          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length === el.lettersCount;
-          if (someEmpty){
+          const someEmpty =
+            attempt.letters.filter((m) => m.type === this.types.LetterEmpty)
+              .length === el.lettersCount;
+          if (someEmpty) {
             return;
           }
 
@@ -265,16 +302,19 @@ mixins = mixins.concat([
           );
         });
 
-        const ignoreLetters = []
-        el.allIgnoreLetters.forEach(ig => {
-          if (!el.allCorrectLetters.includes(ig) && !el.allMustLetters.includes(ig)){
+        const ignoreLetters = [];
+        el.allIgnoreLetters.forEach((ig) => {
+          if (
+            !el.allCorrectLetters.includes(ig) &&
+            !el.allMustLetters.includes(ig)
+          ) {
             ignoreLetters.push(ig);
           }
-        })
-        if (ignoreLetters.length > 0){
+        });
+        if (ignoreLetters.length > 0) {
           regexes.push({
-            title: 'ignoreAllLetters',
-            pattern: new RegExp(`^((?![${ignoreLetters.join('')}]).)*$`),
+            title: "ignoreAllLetters",
+            pattern: new RegExp(`^((?![${ignoreLetters.join("")}]).)*$`),
             expected: true,
           });
         }
@@ -286,16 +326,20 @@ mixins = mixins.concat([
             .toLowerCase();
 
           const tests = [];
-          let hasFalse = false;          
+          let hasFalse = false;
           regexes.forEach((r) => {
-            if (!hasFalse)
-            {
-              r.pattern.lastIndex = 0;
-              const test = r.pattern.test(withoutAccent);
-              const compare = test === r.expected;
-              tests.push(compare);
-              hasFalse = !compare;
-            }            
+            if (hasFalse) {
+              return;
+            }
+            r.pattern.lastIndex = 0;
+            const test = r.pattern.test(withoutAccent);
+            const compare = test === r.expected;
+            tests.push(compare);
+            hasFalse = !compare;
+
+            // if (withoutAccent === "hated") {
+            //   console.log(r.title, r.pattern, r.expected, test, compare);
+            // }
           });
 
           if (!tests.includes(false)) {
