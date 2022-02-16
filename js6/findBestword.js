@@ -218,7 +218,7 @@ mixins = mixins.concat([
         const regexes = [];
 
         el.attempts.forEach((attempt) => {
-          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length > 0;
+          const someEmpty = attempt.letters.filter(m => m.type === this.types.LetterEmpty).length === el.lettersCount;
           if (someEmpty){
             return;
           }
@@ -279,7 +279,6 @@ mixins = mixins.concat([
           });
         }
 
-
         langWords.forEach((w) => {
           const withoutAccent = w
             .normalize("NFD")
@@ -287,11 +286,16 @@ mixins = mixins.concat([
             .toLowerCase();
 
           const tests = [];
+          let hasFalse = false;          
           regexes.forEach((r) => {
-            r.pattern.lastIndex = 0;
-            const test = r.pattern.test(withoutAccent);
-            const compare = test === r.expected;
-            tests.push(compare);
+            if (!hasFalse)
+            {
+              r.pattern.lastIndex = 0;
+              const test = r.pattern.test(withoutAccent);
+              const compare = test === r.expected;
+              tests.push(compare);
+              hasFalse = !compare;
+            }            
           });
 
           if (!tests.includes(false)) {
