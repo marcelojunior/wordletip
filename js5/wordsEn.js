@@ -1980,6 +1980,7 @@ const enWords = [
   "ruler",
   "rules",
   "rural",
+  "rupee",
   "sadly",
   "safer",
   "salad",

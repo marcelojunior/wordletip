@@ -4391,6 +4391,7 @@ const ptWords = [
   'rufam',
   'rufai',
   'ruela',
+  'runas',
   'rudes',
   'rubro',
   'rubra',
