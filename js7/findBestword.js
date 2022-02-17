@@ -262,6 +262,34 @@ mixins = mixins.concat([
           });
         }        
       },
+      addRegexIgnoreWords(regexes, attempt){
+        const el = this;
+        const title = "ignoreWords";
+        const letters = [];
+        const type = el.types.LetterIgnore;
+
+        if (!attempt.letters.some((m) => m.type === type)) {
+          return;
+        }
+
+        attempt.letters.forEach(letter => {
+          if (letter.type === type) {
+            if (letter.letter) {
+              letters.push(letter.letter);
+            } else {
+              letters.push("\\w");
+            }
+          } 
+        });
+
+        if (letters.length && letters.filter(m => m === '\\w').length < letters.length){
+          regexes.push({
+            title: title,
+            pattern: new RegExp(letters.join(""), "g"),
+            expected: false,
+          });
+        }        
+      },
       addRegex(regexes, attempt, title, expected, type, completeWithW) {
         const el = this;
         const letters = [];
@@ -270,7 +298,7 @@ mixins = mixins.concat([
         }
 
         attempt.letters.forEach((letter) => {
-          if (letter.type === type && letter.letter) {
+          if (letter.type === type) {
             if (letter.letter) {
               letters.push(letter.letter);
             } else {
@@ -320,14 +348,7 @@ mixins = mixins.concat([
           );
           el.addRegexInTheWord(regexes,attempt)          
           el.addRegexInTheWordSpot(regexes,attempt)          
-          el.addRegex(
-            regexes,
-            attempt,
-            "ignoreWords",
-            false,
-            el.types.LetterIgnore,
-            true
-          );
+          el.addRegexIgnoreWords(regexes,attempt)          
         });
 
         const ignoreLetters = [];
@@ -365,7 +386,7 @@ mixins = mixins.concat([
             tests.push(compare);
             hasFalse = !compare;
 
-            if (withoutAccent === "lista") {
+            if (withoutAccent === "shake") {
               console.log(withoutAccent, r.title, r.pattern, r.expected, test, compare);
             }
           });
