@@ -215,6 +215,53 @@ mixins = mixins.concat([
           }
         }
       },
+      addRegexInTheWordSpot(regexes, attempt){
+        const el = this;
+        const title = "inTheWordSpot";
+        const type = el.types.LetterMust;
+
+        if (!attempt.letters.some((m) => m.type === type)) {
+          return;
+        }
+
+        attempt.letters.forEach((letter, i) => {
+          if (letter.type === type && letter.letter) {
+            const letters = Array(el.lettersCount).fill('\\w')
+            letters[i] = letter.letter;
+            regexes.push({
+              title: title,
+              pattern: new RegExp(letters.join(''), 'g'),
+              expected: false,
+            });
+          } 
+        });
+        
+      },
+      addRegexInTheWord(regexes, attempt){
+        const el = this;
+        const title = "inTheWord";
+        const letters = [];
+        const type = el.types.LetterMust;
+
+        if (!attempt.letters.some((m) => m.type === type)) {
+          return;
+        }
+
+        attempt.letters.forEach((letter, i) => {
+          if (letter.type === type && letter.letter) {
+            letters.push(letter.letter)
+            letters[i] = letter.letter;
+          } 
+        });
+
+        if (letters.length){
+          regexes.push({
+            title: title,
+            pattern: new RegExp(`[${letters.join("")}]`, "g"),
+            expected: true,
+          });
+        }        
+      },
       addRegex(regexes, attempt, title, expected, type, completeWithW) {
         const el = this;
         const letters = [];
@@ -223,7 +270,7 @@ mixins = mixins.concat([
         }
 
         attempt.letters.forEach((letter) => {
-          if (letter.type === type) {
+          if (letter.type === type && letter.letter) {
             if (letter.letter) {
               letters.push(letter.letter);
             } else {
@@ -234,14 +281,9 @@ mixins = mixins.concat([
           }
         });
 
-        let pattern = new RegExp(letters.join(""), "g");
-        if (title === "inTheWord") {
-          pattern = new RegExp(`[${letters.join("")}]`, "g");
-        }
-
         regexes.push({
           title: title,
-          pattern: pattern,
+          pattern: new RegExp(letters.join(""), "g"),
           expected: expected,
         });
       },
@@ -276,22 +318,8 @@ mixins = mixins.concat([
             el.types.LetterCorrect,
             true
           );
-          el.addRegex(
-            regexes,
-            attempt,
-            "inTheWord",
-            true,
-            el.types.LetterMust,
-            false
-          );
-          el.addRegex(
-            regexes,
-            attempt,
-            "inTheWordSpot",
-            false,
-            el.types.LetterMust,
-            true
-          );
+          el.addRegexInTheWord(regexes,attempt)          
+          el.addRegexInTheWordSpot(regexes,attempt)          
           el.addRegex(
             regexes,
             attempt,
@@ -337,9 +365,9 @@ mixins = mixins.concat([
             tests.push(compare);
             hasFalse = !compare;
 
-            // if (withoutAccent === "hated") {
-            //   console.log(r.title, r.pattern, r.expected, test, compare);
-            // }
+            if (withoutAccent === "lista") {
+              console.log(withoutAccent, r.title, r.pattern, r.expected, test, compare);
+            }
           });
 
           if (!tests.includes(false)) {
@@ -365,6 +393,9 @@ mixins = mixins.concat([
       },
       setAds() {
         const wordsAds = document.getElementById("wordsAds");
+        if (!wordsAds){
+          return;
+        }
         wordsAds.innerHTML = "";
         const script = document.createElement("script");
         script.src =
@@ -424,6 +455,14 @@ mixins = mixins.concat([
         this.snackbarMsg(alertMsg);
         copyText.remove();
       },
+
+
+      storeAttempts(){
+        localStorage.setItem('storeAttempts',JSON.stringify(this.attempts))
+      },
+      loadAttempts(){
+        this.attempts = JSON.parse(localStorage.getItem('storeAttempts'))
+      }
     },
     mounted() {
       this.lang = this.getCurrentLanguage();

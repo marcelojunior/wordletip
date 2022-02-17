@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css?family=Bree+Serif&amp;display=swap" rel="stylesheet">
 
   <script src="https://kit.fontawesome.com/0c2a0fa93a.js" crossorigin="anonymous"></script>
+  <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
 
   <meta name="keywords" content="wordle, termo, letreco">
   <meta name="description" content="Helper to find words in Wordle">
@@ -135,22 +136,22 @@
                     </v-row>
                   </v-container>
                   <v-container class="d-sm-none d-md-none d-lg-none">
-           
-                      <v-btn color="#00695c" @click="keyboardSetType(types.LetterCorrect)" dark tile>
-                        <span v-if="keyboardType === types.LetterCorrect">{{ t('letterCorrect') }}</span>
-                        <v-icon v-else small>fa-play</v-icon>
-                      </v-btn>
-                      <v-btn color="#ff8f00" @click="keyboardSetType(types.LetterMust)" dark tile>
-                        <span v-if="keyboardType === types.LetterMust">{{ t('letterMust') }}</span>
-                        <v-icon v-else small>fa-play</v-icon>
-                      </v-btn>
-                      <v-btn color="#e53935" @click="keyboardSetType(types.LetterIgnore)" dark tile>
-                        <span v-if="keyboardType === types.LetterIgnore">{{ t('letterIgnore') }}</span>
-                        <v-icon v-else small>fa-play</v-icon>
-                      </v-btn>                  
+
+                    <v-btn color="#00695c" @click="keyboardSetType(types.LetterCorrect)" dark tile>
+                      <span v-if="keyboardType === types.LetterCorrect">{{ t('letterCorrect') }}</span>
+                      <v-icon v-else small>fa-play</v-icon>
+                    </v-btn>
+                    <v-btn color="#ff8f00" @click="keyboardSetType(types.LetterMust)" dark tile>
+                      <span v-if="keyboardType === types.LetterMust">{{ t('letterMust') }}</span>
+                      <v-icon v-else small>fa-play</v-icon>
+                    </v-btn>
+                    <v-btn color="#e53935" @click="keyboardSetType(types.LetterIgnore)" dark tile>
+                      <span v-if="keyboardType === types.LetterIgnore">{{ t('letterIgnore') }}</span>
+                      <v-icon v-else small>fa-play</v-icon>
+                    </v-btn>
                   </v-container>
                   <!-- KEYBOARD TYPES: FIM -->
-                  
+
                   <span v-for="k in keyboard">
                     <a href="javascript:void(0)" @click="toggleKeyboard(k)" class="keyboard"
                       :class="{'keyboard-correct' : keyboardType === types.LetterCorrect, 'keyboard-must' : keyboardType === types.LetterMust, 'keyboard-ignore' : keyboardType === types.LetterIgnore}">{{k}}</a>
@@ -193,7 +194,12 @@
                 <v-toolbar-title>{{ t('wordSuggestion') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text class="mt-5 text-center">
-                <div id="wordsAds" class="mt-5 mb-r"></div>
+                <div class="mt-5 mb-r">
+                  <amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-7115577989589601"
+                    data-ad-slot="3188500033" data-auto-format="rspv" data-full-width="">
+                    <div overflow=""></div>
+                  </amp-ad>
+                </div>
 
                 <v-chip v-for="(word,i) in bestWords" :key="i" style="margin-left: 5px; margin-bottom: 5px" label>
                   {{ word }}
@@ -204,16 +210,16 @@
                   </v-arlert>
               </v-card-text>
 
-                <v-container v-if="bestWords.length > 0">
-                  <v-card dense>
-                    <v-card-text class="text-center">
-                      <v-btn @click="copyText(t('copyText'), $event)" small text>
-                        <v-icon small left>fa-copy</v-icon> {{ t('copy') }}
-                      </v-btn>
-                      <div>{{ t('copyText') }}</div>
-                    </v-card-text>
-                  </v-card>
-                </v-container>
+              <v-container v-if="bestWords.length > 0">
+                <v-card dense>
+                  <v-card-text class="text-center">
+                    <v-btn @click="copyText(t('copyText'), $event)" small text>
+                      <v-icon small left>fa-copy</v-icon> {{ t('copy') }}
+                    </v-btn>
+                    <div>{{ t('copyText') }}</div>
+                  </v-card-text>
+                </v-card>
+              </v-container>
 
               <v-divider></v-divider>
               <v-card flat>
