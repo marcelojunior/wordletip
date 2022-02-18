@@ -195,6 +195,7 @@ mixins = mixins.concat([
         if (this.inputFocus.position < this.lettersCount - 1) {
           this.setFocus(this.inputFocus.attempt, this.inputFocus.position + 1);
         } else {
+          this.findBestWord();
           this.addAttempt();
         }
 
