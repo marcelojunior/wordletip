@@ -319,7 +319,7 @@ mixins = mixins.concat([
         gtag("event", "find_best_word");
         const el = this;
         this.bestWords = [];
-        const langWords = words.find((m) => m.lang === el.lang).words;
+        const langWords = [...new Set(words.find((m) => m.lang === el.lang).words)];
         const regexes = [];
 
         el.attempts.forEach((attempt) => {

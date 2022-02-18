@@ -139,15 +139,15 @@
 
                     <v-btn color="#00695c" @click="keyboardSetType(types.LetterCorrect)" dark tile>
                       <span v-if="keyboardType === types.LetterCorrect">{{ t('letterCorrect') }}</span>
-                      <v-icon v-else small>fa-play</v-icon>
+                      <v-icon v-else small>fa-dot-circle</v-icon>
                     </v-btn>
                     <v-btn color="#ff8f00" @click="keyboardSetType(types.LetterMust)" dark tile>
                       <span v-if="keyboardType === types.LetterMust">{{ t('letterMust') }}</span>
-                      <v-icon v-else small>fa-play</v-icon>
+                      <v-icon v-else small>fa-dot-circle</v-icon>
                     </v-btn>
                     <v-btn color="#e53935" @click="keyboardSetType(types.LetterIgnore)" dark tile>
                       <span v-if="keyboardType === types.LetterIgnore">{{ t('letterIgnore') }}</span>
-                      <v-icon v-else small>fa-play</v-icon>
+                      <v-icon v-else small>fa-dot-circle</v-icon>
                     </v-btn>
                   </v-container>
                   <!-- KEYBOARD TYPES: FIM -->
@@ -201,9 +201,9 @@
                   </amp-ad>
                 </div>
 
-                <v-chip v-for="(word,i) in bestWords" :key="i" style="margin-left: 5px; margin-bottom: 5px" label>
+                <span v-for="(word,i) in bestWords" :key="i" class="best-word">
                   {{ word }}
-                </v-chip>
+                </span>
 
                 <v-alert v-if="noBestWord" border="left" type="warning" dense>
                   {{ t('noBestWords') }}
