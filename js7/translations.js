@@ -24,6 +24,7 @@ var translations = {
     letterCorrect: 'Letra Correta',
     letterMust: 'Letra Presente',
     letterIgnore: 'Letra Errada',
+    openGame: 'Abrir Jogo'
   },
   en: {
     searchWord: 'Search Words',
@@ -50,5 +51,6 @@ var translations = {
     letterCorrect: 'Correct letter',
     letterMust: 'In the word',
     letterIgnore: 'Wrong Letter',
+    openGame: 'Open Game'
   },
 };

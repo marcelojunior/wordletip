@@ -31,6 +31,22 @@ mixins = mixins.concat([
         attempts: [],
         lettersCount: 5,
         keyboardType: 1,
+        dialogGame: false,
+        currentGame: null,
+        games: [
+          { lang: "pt", title: "Term.ooo", url: "https://term.ooo/" },
+          {
+            lang: "pt",
+            title: "Letreco",
+            url: "https://www.gabtoschi.com/letreco/",
+          },
+          { lang: "pt", title: "Palavrês", url: "https://palavr.es/" },
+          {
+            lang: "en",
+            title: "Wordle",
+            url: "https://www.nytimes.com/games/wordle/index.html",
+          },
+        ],
       };
     },
     computed: {
@@ -216,7 +232,7 @@ mixins = mixins.concat([
           }
         }
       },
-      addRegexInTheWordSpot(regexes, attempt){
+      addRegexInTheWordSpot(regexes, attempt) {
         const el = this;
         const title = "inTheWordSpot";
         const type = el.types.LetterMust;
@@ -227,18 +243,17 @@ mixins = mixins.concat([
 
         attempt.letters.forEach((letter, i) => {
           if (letter.type === type && letter.letter) {
-            const letters = Array(el.lettersCount).fill('\\w')
+            const letters = Array(el.lettersCount).fill("\\w");
             letters[i] = letter.letter;
             regexes.push({
               title: title,
-              pattern: new RegExp(letters.join(''), 'g'),
+              pattern: new RegExp(letters.join(""), "g"),
               expected: false,
             });
-          } 
+          }
         });
-        
       },
-      addRegexInTheWord(regexes, attempt){
+      addRegexInTheWord(regexes, attempt) {
         const el = this;
         const title = "inTheWord";
         const letters = [];
@@ -250,20 +265,20 @@ mixins = mixins.concat([
 
         attempt.letters.forEach((letter, i) => {
           if (letter.type === type && letter.letter) {
-            letters.push(letter.letter)
+            letters.push(letter.letter);
             letters[i] = letter.letter;
-          } 
+          }
         });
 
-        if (letters.length){
+        if (letters.length) {
           regexes.push({
             title: title,
             pattern: new RegExp(`[${letters.join("")}]`, "g"),
             expected: true,
           });
-        }        
+        }
       },
-      addRegexIgnoreWords(regexes, attempt){
+      addRegexIgnoreWords(regexes, attempt) {
         const el = this;
         const title = "ignoreWords";
         const letters = [];
@@ -273,23 +288,26 @@ mixins = mixins.concat([
           return;
         }
 
-        attempt.letters.forEach(letter => {
+        attempt.letters.forEach((letter) => {
           if (letter.type === type) {
             if (letter.letter) {
               letters.push(letter.letter);
             } else {
               letters.push("\\w");
             }
-          } 
+          }
         });
 
-        if (letters.length && letters.filter(m => m === '\\w').length < letters.length){
+        if (
+          letters.length &&
+          letters.filter((m) => m === "\\w").length < letters.length
+        ) {
           regexes.push({
             title: title,
             pattern: new RegExp(letters.join(""), "g"),
             expected: false,
           });
-        }        
+        }
       },
       addRegex(regexes, attempt, title, expected, type, completeWithW) {
         const el = this;
@@ -320,7 +338,9 @@ mixins = mixins.concat([
         gtag("event", "find_best_word");
         const el = this;
         this.bestWords = [];
-        const langWords = [...new Set(words.find((m) => m.lang === el.lang).words)];
+        const langWords = [
+          ...new Set(words.find((m) => m.lang === el.lang).words),
+        ];
         const regexes = [];
 
         el.attempts.forEach((attempt) => {
@@ -347,9 +367,9 @@ mixins = mixins.concat([
             el.types.LetterCorrect,
             true
           );
-          el.addRegexInTheWord(regexes,attempt)          
-          el.addRegexInTheWordSpot(regexes,attempt)          
-          el.addRegexIgnoreWords(regexes,attempt)          
+          el.addRegexInTheWord(regexes, attempt);
+          el.addRegexInTheWordSpot(regexes, attempt);
+          el.addRegexIgnoreWords(regexes, attempt);
         });
 
         const ignoreLetters = [];
@@ -388,7 +408,14 @@ mixins = mixins.concat([
             hasFalse = !compare;
 
             if (withoutAccent === "shake") {
-              console.log(withoutAccent, r.title, r.pattern, r.expected, test, compare);
+              console.log(
+                withoutAccent,
+                r.title,
+                r.pattern,
+                r.expected,
+                test,
+                compare
+              );
             }
           });
 
@@ -415,7 +442,7 @@ mixins = mixins.concat([
       },
       setAds() {
         const wordsAds = document.getElementById("wordsAds");
-        if (!wordsAds){
+        if (!wordsAds) {
           return;
         }
         wordsAds.innerHTML = "";
@@ -478,13 +505,23 @@ mixins = mixins.concat([
         copyText.remove();
       },
 
-
-      storeAttempts(){
-        localStorage.setItem('storeAttempts',JSON.stringify(this.attempts))
+      selectGame(game) {
+        this.lang = game.lang;
+        this.currentGame = game;
+        this.dialogGame = true;
+        setTimeout(() => {
+          const dialog = document.getElementsByClassName("game-dialog")[0];
+          const iframe = document.getElementById("game-iframe");
+          iframe.style.height = `${dialog.offsetHeight - 48}px`;
+        }, 200);
       },
-      loadAttempts(){
-        this.attempts = JSON.parse(localStorage.getItem('storeAttempts'))
-      }
+
+      storeAttempts() {
+        localStorage.setItem("storeAttempts", JSON.stringify(this.attempts));
+      },
+      loadAttempts() {
+        this.attempts = JSON.parse(localStorage.getItem("storeAttempts"));
+      },
     },
     mounted() {
       this.lang = this.getCurrentLanguage();

@@ -66,6 +66,9 @@
             <v-col sm="12" md="8">
               <v-card>
                 <v-card-title>
+                  <v-btn @click="dialogHelp = true" icon small>
+                    <v-icon small>fa-question</v-icon>
+                  </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn @click="clear()" icon small>
                     <v-icon small>fa-broom</v-icon>
@@ -83,13 +86,29 @@
                   </v-row>
                   <!-- ATTEMPTS: FIM -->
 
+                  <!-- OPEN GAME -->
                   <v-row justify="center">
-                    <v-col md="5" sm="12">
-                      <v-btn @click="dialogHelp = true" small block text>
-                        {{ t('whatIsThis') }}
+                    <v-col md="5" sm="6">
+                      <v-menu>
+                        <template v-slot:activator="{ on }">
+                          <v-btn v-on="on" small block text>
+                            <v-icon left small>fa-chess-board</v-icon> {{ t('openGame') }}
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <v-list-item v-for="game in games" @click="selectGame(game)">
+                            <v-list-item-title>{{ game.title }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-col>
+                    <v-col md="5" sm="6" v-if="currentGame">
+                      <v-btn @click="dialogGame = true" small block text>
+                        <v-icon left small>fa-window-maximize</v-icon> {{ currentGame.title }}
                       </v-btn>
                     </v-col>
                   </v-row>
+                  <!-- OPEN GAME: FIM -->
                 </v-card-text>
               </v-card>
             </v-col>
@@ -232,7 +251,8 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="dialogHelp" fullscreen hide-overlay>
+          <v-dialog v-model="dialogHelp" :width="($vuetify.breakpoint.xsOnly ? '100%' : '50%')"
+            :fullscreen="$vuetify.breakpoint.xsOnly" hide-overlay>
             <v-card fixed>
               <v-toolbar dark dense color="primary">
                 <v-btn icon dark @click="dialogHelp = false">
@@ -248,6 +268,24 @@
                 <p v-html="t('helpP3')" class="text-body-1"></p>
                 <p v-html="t('helpP4')" class="text-body-1"></p>
               </v-card-text>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog content-class="game-dialog" v-model="dialogGame"
+            :width="($vuetify.breakpoint.xsOnly ? '100%' : '50%')" :fullscreen="$vuetify.breakpoint.xsOnly" scrollable
+            hide-overlay>
+            <v-card v-if="currentGame">
+              <v-toolbar dark dense color="primary">
+                <v-btn icon dark @click="dialogGame = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ currentGame.title }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="dialogGame = false">
+                  <v-icon>mdi-minus</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <iframe id="game-iframe" :src="currentGame.url" frameborder="0" width="100%"></iframe>
             </v-card>
           </v-dialog>
 
@@ -267,8 +305,8 @@
   <script type="text/javascript">
     var infolinks_pid = 3358912;
     var infolinks_wsid = 0;
-    </script>
-    <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
+  </script>
+  <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" crossorigin="anonymous"></script>
