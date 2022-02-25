@@ -2732,6 +2732,7 @@ const ptWords = [
   'infle',
   'infla',
   'induz',
+  'indio',
   'incôo',
   'incoá',
   'incoe',
