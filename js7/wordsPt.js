@@ -1840,6 +1840,7 @@ const ptWords = [
   'exibi',
   'exibe',
   'exiba',
+  'exito',
   'exato',
   'exata',
   'exará',
