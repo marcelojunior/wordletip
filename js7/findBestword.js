@@ -540,7 +540,7 @@ mixins = mixins.concat([
         return qParams;
       },
 
-      share() {        
+      share() {
         const el = this;
 
         gtag("event", "click_share");
@@ -548,32 +548,40 @@ mixins = mixins.concat([
           lang: el.lang,
         });
 
-        const tips = [];
+        const param = { lang: el.lang, tips: [] };
 
-        [0,1].forEach(i => {
-          if (el.attempts[i]){
-            tips.push(el.attempts[i])
+        [0, 1].forEach((i) => {
+          if (el.attempts[i]) {
+            param.tips.push(el.attempts[i]);
           }
-        })
+        });
 
-        const strAttempts = JSON.stringify(tips);
+        const strAttempts = JSON.stringify(param);
         const base64Attempts = btoa(strAttempts);
-        const link = `${el.t('shareText')} https://www.wordletip.com.br?a=${base64Attempts}`;
+        const link = `${el.t(
+          "shareText"
+        )} https://www.wordletip.com.br?a=${base64Attempts}`;
         el.copyText(link);
         const alertMsg = this.t("shareCopied");
         this.snackbarMsg(alertMsg);
       },
-      
-      decoreLinkShare(){
+
+      decoreLinkShare() {
         // Query Params
         const qParams = this.getParams();
 
         if (qParams["a"]) {
-          this.attempts = JSON.parse(atob(qParams["a"]));
+          const param = JSON.parse(atob(qParams["a"]));
+          if (Array.isArray(param)) {
+            this.attempts = param;
+          } else {
+            this.lang = param.lang;
+            this.attempts = param.tips;
+          }
+
           this.addAttempt();
         }
-      }
-
+      },
     },
     mounted() {
       const el = this;
@@ -581,7 +589,7 @@ mixins = mixins.concat([
       this.clear();
       setTimeout(() => {
         el.decoreLinkShare();
-      }, 300)
+      }, 300);
     },
   },
 ]);
