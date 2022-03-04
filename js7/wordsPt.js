@@ -5292,6 +5292,7 @@ const ptWords = [
   'torci',
   'torce',
   'toras',
+  'torga',
   'toque',
   'topou',
   'topos',
