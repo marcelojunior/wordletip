@@ -475,11 +475,6 @@ mixins = mixins.concat([
 
       copyText(text, event) {
         const el = this;
-        const userId = el.getUserId();
-        gtag("event", "click_copy_text");
-        Rollbar.info(`click_copy_text ${userId}`, {
-          lang: el.lang,
-        });
 
         const id = `copy-${(+new Date()).toString()}`;
         const copyText = document.createElement("textarea");
@@ -499,10 +494,21 @@ mixins = mixins.concat([
         copyText.select();
         copyText.setSelectionRange(0, 99999);
         document.execCommand("copy");
+        copyText.remove();
+      },
+
+      copyTextResult(text, event) {
+        const el = this;
+        const userId = el.getUserId();
+        gtag("event", "click_copy_text");
+        Rollbar.info(`click_copy_text ${userId}`, {
+          lang: el.lang,
+        });
+
+        el.copyText(text, event);
 
         const alertMsg = this.t("copiedToClipboard");
         this.snackbarMsg(alertMsg);
-        copyText.remove();
       },
 
       selectGame(game) {
@@ -522,10 +528,60 @@ mixins = mixins.concat([
       loadAttempts() {
         this.attempts = JSON.parse(localStorage.getItem("storeAttempts"));
       },
+
+      getParams() {
+        const qParams = {},
+          keyValuePairs = location.search.slice(1).split("&");
+        keyValuePairs.forEach(function (keyValuePair) {
+          keyValuePair = keyValuePair.split("=");
+          qParams[decodeURIComponent(keyValuePair[0])] =
+            decodeURIComponent(keyValuePair[1]) || "";
+        });
+        return qParams;
+      },
+
+      share() {        
+        const el = this;
+
+        gtag("event", "click_share");
+        Rollbar.info(`click_share`, {
+          lang: el.lang,
+        });
+
+        const tips = [];
+
+        [0,1].forEach(i => {
+          if (el.attempts[i]){
+            tips.push(el.attempts[i])
+          }
+        })
+
+        const strAttempts = JSON.stringify(tips);
+        const base64Attempts = btoa(strAttempts);
+        const link = `${el.t('shareText')} https://www.wordletip.com.br?a=${base64Attempts}`;
+        el.copyText(link);
+        const alertMsg = this.t("shareCopied");
+        this.snackbarMsg(alertMsg);
+      },
+      
+      decoreLinkShare(){
+        // Query Params
+        const qParams = this.getParams();
+
+        if (qParams["a"]) {
+          this.attempts = JSON.parse(atob(qParams["a"]));
+          this.addAttempt();
+        }
+      }
+
     },
     mounted() {
+      const el = this;
       this.lang = this.getCurrentLanguage();
       this.clear();
+      setTimeout(() => {
+        el.decoreLinkShare();
+      }, 300)
     },
   },
 ]);

@@ -24,7 +24,10 @@ var translations = {
     letterCorrect: 'Letra Correta',
     letterMust: 'Letra Presente',
     letterIgnore: 'Letra Errada',
-    openGame: 'Abrir Jogo'
+    openGame: 'Abrir Jogo',
+    share: 'Compartilhar',
+    shareText: 'Estas foram minhas duas primeiras tentativas para acertar a palavra do dia:',
+    shareCopied: 'Tentativas copiadas. Compartilhe a vontade ;)'
   },
   en: {
     searchWord: 'Search Words',
@@ -51,6 +54,9 @@ var translations = {
     letterCorrect: 'Correct letter',
     letterMust: 'In the word',
     letterIgnore: 'Wrong Letter',
-    openGame: 'Open Game'
+    openGame: 'Open Game',
+    share: 'Share',
+    shareText: 'These were my first two attempts to get the word of the day right:',
+    shareCopied: 'Copied attempts ;)'
   },
 };
