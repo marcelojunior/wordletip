@@ -191,6 +191,7 @@ const ptWords = [
   'areis',
   'areia',
   'areal',
+  'áreas',
   'ardor',
   'ardis',
   'ardil',
